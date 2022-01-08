@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/category_menu_card.dart';
+
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
 
@@ -16,23 +18,17 @@ class CategoriesScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: <Widget>[
-              Card(
-                child: Text(
-                  'Dummy Text 1',
-                  key: key,
-                ),
+              CategoryMenuCard(
+                key: key,
+                cardTitle: 'First dum text',
               ),
-              Card(
-                child: Text(
-                  'Dummy Text 2',
-                  key: key,
-                ),
+              CategoryMenuCard(
+                key: key,
+                cardTitle: '2nd dum text',
               ),
-              Card(
-                child: Text(
-                  'Dummy Text 3',
-                  key: key,
-                ),
+              CategoryMenuCard(
+                key: key,
+                cardTitle: '3rd dum text',
               ),
             ],
           ),
