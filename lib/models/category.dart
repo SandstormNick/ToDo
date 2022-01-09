@@ -1,10 +1,15 @@
 class Category {
-  int categoryId;
+  int? categoryId;
   String categoryName;
   bool isDeleted;
 
   Category({
-    required this.categoryId,
+    this.categoryId,
+    required this.categoryName,
+    this.isDeleted = false,
+  });
+
+  Category.add({
     required this.categoryName,
     this.isDeleted = false,
   });
