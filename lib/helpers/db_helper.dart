@@ -25,6 +25,18 @@ class DBHelper {
     );
   }
 
+  static Future<int> insertReturnId(
+      String table, Map<String, Object> data) async {
+    final db = await DBHelper.database();
+    final int insertedId = await db.insert(
+      table,
+      data,
+      conflictAlgorithm: sql.ConflictAlgorithm.replace,
+    );
+
+    return insertedId;
+  }
+
   static Future<List<Map<String, dynamic>>> getData(String table) async {
     final db = await DBHelper.database();
     return db.query(table);

@@ -11,7 +11,7 @@ class CategoryProvider with ChangeNotifier {
     return [..._items];
   }
 
-  void addCategory(String catName) {
+  Future<void> addCategory(String catName) async {
     final newCategory = Category(
       categoryName: catName,
     );
@@ -19,10 +19,12 @@ class CategoryProvider with ChangeNotifier {
     _items.add(newCategory);
     notifyListeners();
 
-    DBHelper.insert('category', {
+    final int insertedId = await DBHelper.insertReturnId('category', {
       'CategoryName': newCategory.categoryName,
       'IsDeleted': 0,
     });
+
+    _items.last.categoryId = insertedId;
 
     // for (int i = 0; i < _items.length; i++) {
     //   print(_items[i].categoryName);

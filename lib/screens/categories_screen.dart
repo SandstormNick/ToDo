@@ -50,8 +50,8 @@ class CategoriesScreen extends StatelessWidget {
                                           i < categories.items.length;
                                           i++)
                                         CategoryMenuCard(
-                                            cardTitle: categories
-                                                .items[i].categoryName),
+                                          category: categories.items[i],
+                                        ),
                                     ],
                                   ),
                                 ),

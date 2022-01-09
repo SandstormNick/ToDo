@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CategoryMenuCard extends StatelessWidget {
-  final String cardTitle;
+import '../models/category.dart';
 
-  const CategoryMenuCard({
-    Key? key,
-    required this.cardTitle,
-  }) : super(key: key);
+class CategoryMenuCard extends StatelessWidget {
+  //final String cardTitle;
+  final Category category;
+
+  const CategoryMenuCard({Key? key, required this.category}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +15,13 @@ class CategoryMenuCard extends StatelessWidget {
       child: Card(
         child: InkWell(
           splashColor: Colors.green,
-          onTap: () {},
+          onTap: () {
+            print(category.categoryId);
+          },
           child: Row(
             children: <Widget>[
               Expanded(
-                child: Text(cardTitle),
+                child: Text(category.categoryName),
               )
             ],
           ),
