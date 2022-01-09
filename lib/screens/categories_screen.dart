@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/category_provider.dart';
 
 import './add_category_screen.dart';
 
@@ -24,25 +27,36 @@ class CategoriesScreen extends StatelessWidget {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              CategoryMenuCard(
-                key: key,
-                cardTitle: 'First dum text',
-              ),
-              CategoryMenuCard(
-                key: key,
-                cardTitle: '2nd dum text',
-              ),
-              CategoryMenuCard(
-                key: key,
-                cardTitle: '3rd dum text',
-              ),
-            ],
-          ),
-        ),
+      body: FutureBuilder(
+        future: Provider.of<CategoryProvider>(context, listen: false)
+            .fetchAndSetCategories(),
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Consumer<CategoryProvider>(
+                    child: const Center(
+                      child: Text('Add your first ToDo Category'),
+                    ),
+                    builder: (context, categories, child) =>
+                        categories.items.isEmpty
+                            ? child!
+                            : SingleChildScrollView(
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      for (var i = 0;
+                                          i < categories.items.length;
+                                          i++)
+                                        CategoryMenuCard(
+                                            cardTitle: categories
+                                                .items[i].categoryName),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                  ),
       ),
     );
   }

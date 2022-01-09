@@ -30,7 +30,7 @@ class CategoryProvider with ChangeNotifier {
     // }
   }
 
-  Future<void> fetchAndSetPersons() async {
+  Future<void> fetchAndSetCategories() async {
     final dataList = await DBHelper.getData('category');
     _items = dataList
         .map(
