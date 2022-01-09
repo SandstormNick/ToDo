@@ -21,8 +21,13 @@ class CategoryProvider with ChangeNotifier {
 
     DBHelper.insert('category', {
       'CategoryName': newCategory.categoryName,
-      'IsDeleted': newCategory.isDeleted,
+      'IsDeleted': 0,
     });
+
+    // for (int i = 0; i < _items.length; i++) {
+    //   print(_items[i].categoryName);
+    //   print(_items[i].isDeleted);
+    // }
   }
 
   Future<void> fetchAndSetPersons() async {

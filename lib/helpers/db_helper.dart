@@ -13,7 +13,7 @@ class DBHelper {
     db.execute(
         'CREATE TABLE category(CategoryId INTEGER PRIMARY KEY,CategoryName TEXT, IsDeleted INTEGER DEFAULT 0)');
     db.execute(
-        'CREATE TABLE item(ItemId INTEGER PRIMARY KEY, ItemName TEXT, IsCompleted INTEGER DEFAULT 0, IsDeleted INTEGER DEFAULT 0, DateAdded TEXT, FOREIGN KEY (CategoryId_FK) REFERENCES category)');
+        'CREATE TABLE item(ItemId INTEGER PRIMARY KEY, ItemName TEXT, IsCompleted INTEGER DEFAULT 0, IsDeleted INTEGER DEFAULT 0, DateAdded TEXT, FOREIGN KEY (CategoryId) REFERENCES category)');
   }
 
   static Future<void> insert(String table, Map<String, Object> data) async {

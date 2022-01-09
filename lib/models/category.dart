@@ -1,16 +1,16 @@
 class Category {
   int? categoryId;
   String categoryName;
-  bool isDeleted;
+  int isDeleted; //0 = false, 1 = true
 
   Category({
     this.categoryId,
     required this.categoryName,
-    this.isDeleted = false,
+    this.isDeleted = 0,
   });
 
   Category.add({
     required this.categoryName,
-    this.isDeleted = false,
+    this.isDeleted = 0,
   });
 }
