@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './add_category_screen.dart';
+
 import '../widgets/category_menu_card.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -13,6 +15,14 @@ class CategoriesScreen extends StatelessWidget {
           'Categories',
           key: key,
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddCategoryScreen.routeName);
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
