@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../models/category.dart';
+import '../models/category_arguments.dart';
+
+import '../screens/category_screen.dart';
 
 class CategoryMenuCard extends StatelessWidget {
-  //final String cardTitle;
   final Category category;
 
-  const CategoryMenuCard({Key? key, required this.category}) : super(key: key);
+  const CategoryMenuCard({
+    Key? key,
+    required this.category,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +21,11 @@ class CategoryMenuCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.green,
           onTap: () {
-            print(category.categoryId);
+            Navigator.pushNamed(
+              context,
+              CategoryScreen.routeName,
+              arguments: CategoryArguments(category.categoryId),
+            );
           },
           child: Row(
             children: <Widget>[
