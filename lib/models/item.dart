@@ -1,5 +1,5 @@
 class Item {
-  int itemId;
+  int? itemId;
   String itemName;
   bool isCompleted;
   bool isDeleted;
@@ -7,7 +7,7 @@ class Item {
   int categoryIdfK;
 
   Item({
-    required this.itemId,
+    this.itemId,
     required this.itemName,
     this.isCompleted = false,
     this.isDeleted = false,

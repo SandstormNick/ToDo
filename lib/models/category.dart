@@ -8,9 +8,4 @@ class Category {
     required this.categoryName,
     this.isDeleted = 0,
   });
-
-  Category.add({
-    required this.categoryName,
-    this.isDeleted = 0,
-  });
 }
