@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/category_arguments.dart';
+
+import '../providers/item_provider.dart';
 
 class CategoryScreen extends StatelessWidget {
   static const routeName = 'category';
@@ -26,12 +29,45 @@ class CategoryScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Text(
-        args.categoryId.toString(),
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
+      body: FutureBuilder(
+        future: Provider.of<ItemProvider>(context, listen: false)
+            .fetchAndSetItems(),
+        builder: (context, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer<ItemProvider>(
+                child: const Center(
+                  child: Text('Add an item'),
+                ),
+                builder: (context, catItems, child) => catItems.items.isEmpty
+                    ? child!
+                    : SingleChildScrollView(
+                        child: Center(
+                          child: Column(
+                            children: const [
+                              Card(
+                                child: Text('Item 1'),
+                              ),
+                              Card(
+                                child: Text('Item 2'),
+                              ),
+                              Card(
+                                child: Text('Item 3'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+              ),
       ),
+      // Text(
+      //   args.categoryId.toString(),
+      //   style: const TextStyle(
+      //     fontWeight: FontWeight.bold,
+      //   ),
+      // ),
     );
   }
 }

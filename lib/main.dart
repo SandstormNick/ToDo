@@ -6,12 +6,14 @@ import 'screens/add_category_screen.dart';
 import 'screens/category_screen.dart';
 
 import 'providers/category_provider.dart';
+import 'providers/item_provider.dart';
 
 void main() {
   //runApp(const MyApp());
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => CategoryProvider()),
+      ChangeNotifierProvider(create: (context) => ItemProvider()),
     ],
     child: const MyApp(),
   ));
