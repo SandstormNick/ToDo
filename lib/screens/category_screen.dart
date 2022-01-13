@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/category_arguments.dart';
+import '../models/category.dart';
 
 import '../providers/item_provider.dart';
 
@@ -17,8 +17,7 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as CategoryArguments;
+    final args = ModalRoute.of(context)!.settings.arguments as Category;
     print(args.categoryId);
 
     return Scaffold(
@@ -32,7 +31,7 @@ class CategoryScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.pushNamed(context, AddItemScreen.routeName,
-                  arguments: CategoryArguments(args.categoryId));
+                  arguments: args);
             },
           ),
         ],

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/item_provider.dart';
 
-import '../models/category_arguments.dart';
+import '../models/category.dart';
 
 class AddItemScreen extends StatefulWidget {
   static const routeName = 'add-item';
@@ -31,8 +31,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as CategoryArguments;
+    final args = ModalRoute.of(context)!.settings.arguments as Category;
 
     return Scaffold(
       appBar: AppBar(

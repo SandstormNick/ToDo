@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/category.dart';
-import '../models/category_arguments.dart';
 
 import '../screens/category_screen.dart';
 
@@ -24,7 +23,7 @@ class CategoryMenuCard extends StatelessWidget {
             Navigator.pushNamed(
               context,
               CategoryScreen.routeName,
-              arguments: CategoryArguments(category.categoryId),
+              arguments: category,
             );
           },
           child: Row(
