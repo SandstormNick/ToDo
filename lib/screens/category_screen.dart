@@ -7,6 +7,8 @@ import '../providers/item_provider.dart';
 
 import '../screens/add_item_screen.dart';
 
+import '../widgets/item_name_card.dart';
+
 class CategoryScreen extends StatelessWidget {
   static const routeName = 'category';
   //final int categoryId;
@@ -52,28 +54,15 @@ class CategoryScreen extends StatelessWidget {
                     : SingleChildScrollView(
                         child: Center(
                           child: Column(
-                            children: const [
-                              Card(
-                                child: Text('Item 1'),
-                              ),
-                              Card(
-                                child: Text('Item 2'),
-                              ),
-                              Card(
-                                child: Text('Item 3'),
-                              ),
+                            children: [
+                              for (int i = 0; i < catItems.items.length; i++)
+                                ItemNameCard(item: catItems.items[i])
                             ],
                           ),
                         ),
                       ),
               ),
       ),
-      // Text(
-      //   args.categoryId.toString(),
-      //   style: const TextStyle(
-      //     fontWeight: FontWeight.bold,
-      //   ),
-      // ),
     );
   }
 }

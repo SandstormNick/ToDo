@@ -26,6 +26,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       _itemNameController.text,
       categoryId, //pass through categoryid
     );
+    Navigator.of(context).pop();
   }
 
   @override
