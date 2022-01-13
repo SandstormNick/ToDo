@@ -23,7 +23,7 @@ class CategoryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Category',
+          args.categoryName,
           key: key,
         ),
         actions: <Widget>[
