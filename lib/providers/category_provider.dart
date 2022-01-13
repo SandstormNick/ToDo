@@ -26,11 +26,6 @@ class CategoryProvider with ChangeNotifier {
     });
 
     _items.last.categoryId = insertedId;
-
-    // for (int i = 0; i < _items.length; i++) {
-    //   print(_items[i].categoryName);
-    //   print(_items[i].isDeleted);
-    // }
   }
 
   Future<void> fetchAndSetCategories() async {
@@ -40,7 +35,7 @@ class CategoryProvider with ChangeNotifier {
           (mapItem) => Category(
             categoryId: mapItem['CategoryId'],
             categoryName: mapItem['CategoryName'],
-            isDeleted: mapItem['IsDeleted'],
+            isDeleted: mapItem['IsDeleted'] == 0 ? false : true,
           ),
         )
         .toList();

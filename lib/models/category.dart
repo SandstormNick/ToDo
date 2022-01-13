@@ -1,11 +1,11 @@
 class Category {
   int categoryId;
   String categoryName;
-  int isDeleted; //0 = false, 1 = true
+  bool isDeleted;
 
   Category({
     required this.categoryId,
     required this.categoryName,
-    this.isDeleted = 0,
+    this.isDeleted = false,
   });
 }
