@@ -37,7 +37,7 @@ class CategoryScreen extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: Provider.of<ItemProvider>(context, listen: false)
-            .fetchAndSetItems(),
+            .fetchAndSetItems(args.categoryId),
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? const Center(

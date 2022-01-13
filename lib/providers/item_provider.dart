@@ -35,8 +35,10 @@ class ItemProvider with ChangeNotifier {
     items.last.itemId = insertedId;
   }
 
-  Future<void> fetchAndSetItems() async {
-    final dataList = await DBHelper.getData('item');
+  Future<void> fetchAndSetItems(int categoryId) async {
+    //final dataList = await DBHelper.getData('item');
+    final dataList =
+        await DBHelper.getDataWithId('item', 'CategoryId_FK = ?', categoryId);
     _items = dataList
         .map(
           (mapItem) => Item(
@@ -49,5 +51,8 @@ class ItemProvider with ChangeNotifier {
           ),
         )
         .toList();
+    for (int i = 0; i < _items.length; i++) {
+      print(_items[i].itemName);
+    }
   }
 }
