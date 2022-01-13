@@ -13,6 +13,7 @@ class CategoryProvider with ChangeNotifier {
 
   Future<void> addCategory(String catName) async {
     final newCategory = Category(
+      categoryId: 0, //temp value
       categoryName: catName,
     );
 

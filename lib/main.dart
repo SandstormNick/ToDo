@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'screens/categories_screen.dart';
 import 'screens/add_category_screen.dart';
 import 'screens/category_screen.dart';
+import 'screens/add_item_screen.dart';
 
 import 'providers/category_provider.dart';
 import 'providers/item_provider.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         AddCategoryScreen.routeName: (ctx) => const AddCategoryScreen(),
         CategoryScreen.routeName: (ctx) => const CategoryScreen(),
+        AddItemScreen.routeName: (ctx) => const AddItemScreen(),
       },
     );
   }

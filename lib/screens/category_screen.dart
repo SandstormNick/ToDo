@@ -5,6 +5,8 @@ import '../models/category_arguments.dart';
 
 import '../providers/item_provider.dart';
 
+import '../screens/add_item_screen.dart';
+
 class CategoryScreen extends StatelessWidget {
   static const routeName = 'category';
   //final int categoryId;
@@ -15,6 +17,7 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as CategoryArguments;
+    print(args.categoryId);
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +28,10 @@ class CategoryScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AddItemScreen.routeName,
+                  arguments: CategoryArguments(args.categoryId));
+            },
           ),
         ],
       ),

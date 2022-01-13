@@ -26,10 +26,10 @@ class ItemProvider with ChangeNotifier {
 
     final int insertedId = await DBHelper.insertReturnId('item', {
       'ItemName': newItem.itemName,
+      'CategoryId_FK': newItem.categoryIdfK,
       'IsCompleted': 0,
       'IsDeleted': 0,
       'DateAdded': newItem.dateAdded.toString(),
-      'CategoryId': newItem.categoryIdfK
     });
 
     items.last.itemId = insertedId;
@@ -45,7 +45,7 @@ class ItemProvider with ChangeNotifier {
             isCompleted: mapItem['IsCompleted'] == 0 ? false : true,
             isDeleted: mapItem['IsDeleted'] == 0 ? false : true,
             dateAdded: DateTime.parse(mapItem['DateAdded']),
-            categoryIdfK: mapItem['CategoryId'],
+            categoryIdfK: mapItem['CategoryId_FK'],
           ),
         )
         .toList();
