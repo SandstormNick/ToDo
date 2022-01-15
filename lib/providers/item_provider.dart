@@ -50,9 +50,13 @@ class ItemProvider with ChangeNotifier {
           ),
         )
         .toList();
-    for (int i = 0; i < _items.length; i++) {
-      print(_items[i].itemName);
-    }
+
+    _items.sort((a, b) {
+      if (b.isCompleted) {
+        return -1;
+      }
+      return 1;
+    });
   }
 
   Future<void> updateIsCompletedForItem(int? itemId, bool isCompleted) async {
