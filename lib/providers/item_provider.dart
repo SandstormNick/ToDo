@@ -36,7 +36,6 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetItems(int categoryId) async {
-    //final dataList = await DBHelper.getData('item');
     final dataList =
         await DBHelper.getDataWithId('item', 'CategoryId_FK = ?', categoryId);
     _items = dataList
@@ -54,5 +53,16 @@ class ItemProvider with ChangeNotifier {
     for (int i = 0; i < _items.length; i++) {
       print(_items[i].itemName);
     }
+  }
+
+  Future<void> updateIsCompletedForItem(int? itemId, bool isCompleted) async {
+    DBHelper.updateWithId(
+      'item',
+      'ItemId = ?',
+      itemId,
+      {
+        'IsCompleted': isCompleted ? 1 : 0,
+      },
+    );
   }
 }

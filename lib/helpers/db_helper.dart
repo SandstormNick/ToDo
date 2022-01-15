@@ -16,6 +16,16 @@ class DBHelper {
         'CREATE TABLE item(ItemId INTEGER PRIMARY KEY, CategoryId_FK INTEGER, ItemName TEXT, IsCompleted INTEGER DEFAULT 0, IsDeleted INTEGER DEFAULT 0, DateAdded TEXT, FOREIGN KEY (CategoryId_FK) REFERENCES category(CategoryId))');
   }
 
+  static Future<void> updateWithId(
+    String table,
+    String whereClause,
+    int? filterId,
+    Map<String, Object> dataToUpdate,
+  ) async {
+    final db = await DBHelper.database();
+    db.update(table, dataToUpdate, where: whereClause, whereArgs: [filterId]);
+  }
+
   static Future<void> insert(String table, Map<String, Object> data) async {
     final db = await DBHelper.database();
     db.insert(
