@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../models/item.dart';
 
@@ -32,24 +33,43 @@ class _ItemNameCardState extends State<ItemNameCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: Card(
-        child: Row(
-          children: <Widget>[
-            Transform.scale(
-              //scale: 1.5,
-              scale: 1,
-              child: Checkbox(
-                value: widget.item.isCompleted,
-                activeColor: Colors.green,
-                onChanged: _onIsCompletedChanged,
+    return Slidable(
+      key: const ValueKey(0),
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        dismissible: DismissiblePane(
+          onDismissed: () {},
+          motion: const InversedDrawerMotion(),
+        ),
+        children: [
+          SlidableAction(
+            onPressed: (_) {},
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          )
+        ],
+      ),
+      child: SizedBox(
+        height: 100,
+        child: Card(
+          child: Row(
+            children: <Widget>[
+              Transform.scale(
+                //scale: 1.5,
+                scale: 1,
+                child: Checkbox(
+                  value: widget.item.isCompleted,
+                  activeColor: Colors.green,
+                  onChanged: _onIsCompletedChanged,
+                ),
               ),
-            ),
-            Expanded(
-              child: Text(widget.item.itemName),
-            )
-          ],
+              Expanded(
+                child: Text(widget.item.itemName),
+              )
+            ],
+          ),
         ),
       ),
     );
