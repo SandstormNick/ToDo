@@ -53,9 +53,14 @@ class DBHelper {
   }
 
   static Future<List<Map<String, dynamic>>> getDataWithId(
-      String table, String whereClause, int idFilter) async {
+      String table, String whereClause, String orderBy, int idFilter) async {
     final db = await DBHelper.database();
 
-    return db.query(table, where: whereClause, whereArgs: [idFilter]);
+    return db.query(
+      table,
+      where: whereClause,
+      orderBy: orderBy,
+      whereArgs: [idFilter],
+    );
   }
 }

@@ -36,8 +36,8 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetItems(int categoryId) async {
-    final dataList =
-        await DBHelper.getDataWithId('item', 'CategoryId_FK = ?', categoryId);
+    final dataList = await DBHelper.getDataWithId(
+        'item', 'CategoryId_FK = ?', 'IsCompleted', categoryId);
     _items = dataList
         .map(
           (mapItem) => Item(
@@ -50,13 +50,6 @@ class ItemProvider with ChangeNotifier {
           ),
         )
         .toList();
-
-    _items.sort((a, b) {
-      if (b.isCompleted) {
-        return -1;
-      }
-      return 1;
-    });
   }
 
   Future<void> updateIsCompletedForItem(int? itemId, bool isCompleted) async {
