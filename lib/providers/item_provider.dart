@@ -36,8 +36,8 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetItems(int categoryId) async {
-    final dataList = await DBHelper.getDataWithId(
-        'item', 'CategoryId_FK = ?', 'IsCompleted', categoryId);
+    final dataList = await DBHelper.getDataWithId('item',
+        'CategoryId_FK = ? AND IsDeleted = 0', 'IsCompleted', categoryId);
     _items = dataList
         .map(
           (mapItem) => Item(
@@ -61,5 +61,18 @@ class ItemProvider with ChangeNotifier {
         'IsCompleted': isCompleted ? 1 : 0,
       },
     );
+  }
+
+  Future<void> updateIsDeletedForItem(int? itemId) async {
+    DBHelper.updateWithId(
+      'item',
+      'ItemId = ?',
+      itemId,
+      {
+        'IsDeleted': 1, //change back to 1
+      },
+    );
+    int index = _items.indexWhere((item) => item.itemId == itemId);
+    _items.removeAt(index);
   }
 }

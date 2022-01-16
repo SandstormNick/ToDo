@@ -19,31 +19,49 @@ class ItemNameCard extends StatefulWidget {
 }
 
 class _ItemNameCardState extends State<ItemNameCard> {
-  void _onIsCompletedChanged(bool? newValue) => setState(() {
-        if (newValue == true) {
-          widget.item.isCompleted = true;
+  void _onIsCompletedChanged(bool? newValue) => setState(
+        () {
+          if (newValue == true) {
+            widget.item.isCompleted = true;
+            Provider.of<ItemProvider>(context, listen: false)
+                .updateIsCompletedForItem(widget.item.itemId, true);
+          } else {
+            widget.item.isCompleted = false;
+            Provider.of<ItemProvider>(context, listen: false)
+                .updateIsCompletedForItem(widget.item.itemId, false);
+          }
+        },
+      );
+
+  // void _onDeletedPressed(BuildContext context) => setState(
+  //       () {
+  //         Provider.of<ItemProvider>(context, listen: false)
+  //             .updateIsDeletedForItem(widget.item.itemId);
+  //       },
+  //     );
+
+  void _onDeletedPressed() => setState(
+        () {
           Provider.of<ItemProvider>(context, listen: false)
-              .updateIsCompletedForItem(widget.item.itemId, true);
-        } else {
-          widget.item.isCompleted = false;
-          Provider.of<ItemProvider>(context, listen: false)
-              .updateIsCompletedForItem(widget.item.itemId, false);
-        }
-      });
+              .updateIsDeletedForItem(widget.item.itemId);
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      key: const ValueKey(0),
+      key: UniqueKey(),
       endActionPane: ActionPane(
+        extentRatio: 0.25,
         motion: const DrawerMotion(),
         dismissible: DismissiblePane(
-          onDismissed: () {},
+          onDismissed: _onDeletedPressed,
           motion: const InversedDrawerMotion(),
         ),
         children: [
           SlidableAction(
             onPressed: (_) {},
+            //onPressed: _onDeletedPressed,
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,
