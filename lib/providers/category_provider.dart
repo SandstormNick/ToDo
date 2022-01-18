@@ -29,7 +29,8 @@ class CategoryProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetCategories() async {
-    final dataList = await DBHelper.getData('category');
+    final dataList =
+        await DBHelper.getDataNotDeleted('category', 'IsDeleted = 0');
     _items = dataList
         .map(
           (mapItem) => Category(

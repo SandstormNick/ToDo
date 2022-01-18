@@ -63,4 +63,14 @@ class DBHelper {
       whereArgs: [idFilter],
     );
   }
+
+  static Future<List<Map<String, dynamic>>> getDataNotDeleted(
+      String table, String whereClause) async {
+    final db = await DBHelper.database();
+
+    return db.query(
+      table,
+      where: whereClause,
+    );
+  }
 }
