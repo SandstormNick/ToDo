@@ -69,10 +69,12 @@ class ItemProvider with ChangeNotifier {
       'ItemId = ?',
       itemId,
       {
-        'IsDeleted': 1, //change back to 1
+        'IsDeleted': 1,
       },
     );
     int index = _items.indexWhere((item) => item.itemId == itemId);
     _items.removeAt(index);
+
+    notifyListeners();
   }
 }
