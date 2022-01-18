@@ -43,4 +43,19 @@ class CategoryProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> updateIsDeletedForCategory(int? categoryId) async {
+    DBHelper.updateWithId(
+      'category',
+      'CategoryId = ?',
+      categoryId,
+      {
+        'IsDeleted': 1,
+      },
+    );
+    int index = _items.indexWhere((cat) => cat.categoryId == categoryId);
+    _items.removeAt(index);
+
+    notifyListeners();
+  }
 }
