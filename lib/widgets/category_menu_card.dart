@@ -24,6 +24,8 @@ class _CategoryMenuCardState extends State<CategoryMenuCard> {
   void _onDeletedPressed() => setState(() {
         Provider.of<CategoryProvider>(context, listen: false)
             .updateIsDeletedForCategory(widget.category.categoryId);
+
+        Navigator.of(context).pop(true);
       });
 
   @override
@@ -34,8 +36,28 @@ class _CategoryMenuCardState extends State<CategoryMenuCard> {
         extentRatio: 0.25,
         motion: const DrawerMotion(),
         dismissible: DismissiblePane(
-          onDismissed: _onDeletedPressed,
+          onDismissed: () {},
           motion: const InversedDrawerMotion(),
+          confirmDismiss: () async {
+            return await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Delete ' + widget.category.categoryName),
+                    content: const Text(
+                        'Are you sure you want to delete the category?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: _onDeletedPressed,
+                        child: const Text('DELETE'),
+                      ),
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('CANCEL'))
+                    ],
+                  );
+                });
+          },
         ),
         children: [
           SlidableAction(
