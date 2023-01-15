@@ -8,11 +8,11 @@ import '../providers/item_provider.dart';
 
 class ItemNameCard extends StatefulWidget {
   final Item item;
+  final Function() notifiyParent;
 
-  const ItemNameCard({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
+  const ItemNameCard(
+      {Key? key, required this.item, required this.notifiyParent})
+      : super(key: key);
 
   @override
   State<ItemNameCard> createState() => _ItemNameCardState();
@@ -30,6 +30,7 @@ class _ItemNameCardState extends State<ItemNameCard> {
             Provider.of<ItemProvider>(context, listen: false)
                 .updateIsCompletedForItem(widget.item.itemId, false);
           }
+          widget.notifiyParent();
         },
       );
 
