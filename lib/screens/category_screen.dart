@@ -9,11 +9,20 @@ import '../screens/add_item_screen.dart';
 
 import '../widgets/item_name_card.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
   static const routeName = 'category';
   //final int categoryId;
 
   const CategoryScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  refresh() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,7 @@ class CategoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           args.categoryName,
-          key: key,
+          //key: key,
         ),
         actions: <Widget>[
           IconButton(
@@ -55,7 +64,10 @@ class CategoryScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               for (int i = 0; i < catItems.items.length; i++)
-                                ItemNameCard(item: catItems.items[i])
+                                ItemNameCard(
+                                  item: catItems.items[i],
+                                  notifiyParent: refresh,
+                                )
                             ],
                           ),
                         ),
