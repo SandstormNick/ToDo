@@ -13,7 +13,7 @@ class DBHelper {
     await db.execute(
         'CREATE TABLE category(CategoryId INTEGER PRIMARY KEY,CategoryName TEXT, IsDeleted INTEGER DEFAULT 0)');
     await db.execute(
-        'CREATE TABLE item(ItemId INTEGER PRIMARY KEY, CategoryId_FK INTEGER, ItemName TEXT, IsCompleted INTEGER DEFAULT 0, IsDeleted INTEGER DEFAULT 0, DateAdded TEXT, FOREIGN KEY (CategoryId_FK) REFERENCES category(CategoryId))');
+        'CREATE TABLE item(ItemId INTEGER PRIMARY KEY, CategoryId_FK INTEGER, ItemName TEXT, IsCompleted INTEGER DEFAULT 0, IsDeleted INTEGER DEFAULT 0, DateAdded TEXT, ItemOrder INTEGER, FOREIGN KEY (CategoryId_FK) REFERENCES category(CategoryId))');
   }
 
   static Future<void> updateWithId(

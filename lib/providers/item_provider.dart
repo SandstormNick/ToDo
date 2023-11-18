@@ -19,10 +19,13 @@ class ItemProvider with ChangeNotifier {
       itemName: itemName,
       dateAdded: date,
       categoryIdfK: categoryId,
+      itemOrder: _getNextItemOrder(),
     );
 
     _items.add(newItem);
     notifyListeners();
+
+    printItemsDebugMethod();
 
     final int insertedId = await DBHelper.insertReturnId('item', {
       'ItemName': newItem.itemName,
@@ -30,6 +33,7 @@ class ItemProvider with ChangeNotifier {
       'IsCompleted': 0,
       'IsDeleted': 0,
       'DateAdded': newItem.dateAdded.toString(),
+      'ItemOrder': newItem.itemOrder,
     });
 
     items.last.itemId = insertedId;
@@ -47,6 +51,7 @@ class ItemProvider with ChangeNotifier {
             isDeleted: mapItem['IsDeleted'] == 0 ? false : true,
             dateAdded: DateTime.parse(mapItem['DateAdded']),
             categoryIdfK: mapItem['CategoryId_FK'],
+            itemOrder: mapItem['ItemOrder'],
           ),
         )
         .toList();
@@ -76,5 +81,33 @@ class ItemProvider with ChangeNotifier {
     _items.removeAt(index);
 
     notifyListeners();
+  }
+
+  //Function to find the next available ItemOrder where isCompleted is false
+  int _getNextItemOrder() {
+    List<int> itemOrders = _items
+        .where((item) => !item.isCompleted)
+        .map((item) => item.itemOrder)
+        .toList();
+
+    //If there are no items with IsCompleted set to false then return 1
+    if (itemOrders.isEmpty) {
+      return 1;
+    }
+
+    //Otherwise return the maximum itemOrder + 1
+    return itemOrders.reduce((max, order) => order > max ? order : max) + 1;
+  }
+
+  //A method that can be used in debugging
+  void printItemsDebugMethod() {
+    //print _items
+    print('Printing records from item Table');
+    _items.forEach((item) {
+      //print("itemId: " + item.itemId.toString());
+      print("itemName: " + item.itemName);
+      print("itemOrder: " + item.itemOrder.toString());
+      //print(item.dateAdded);
+    });
   }
 }

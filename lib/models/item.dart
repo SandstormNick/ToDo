@@ -5,6 +5,7 @@ class Item {
   bool isDeleted;
   DateTime dateAdded;
   int categoryIdfK;
+  int itemOrder;
 
   Item({
     this.itemId,
@@ -13,5 +14,6 @@ class Item {
     this.isDeleted = false,
     required this.dateAdded,
     required this.categoryIdfK,
+    required this.itemOrder,
   });
 }
