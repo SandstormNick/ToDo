@@ -66,6 +66,20 @@ class ItemProvider with ChangeNotifier {
         'IsCompleted': isCompleted ? 1 : 0,
       },
     );
+    //Also need to update the ItemOrder for this newly completed item
+
+    List<Item> itemOrdersToUpdate = _getItemsToUpdateOrder(itemId!);
+
+    for (var item in itemOrdersToUpdate) { 
+      DBHelper.updateWithId(
+        'item',
+        'ItemId = ?',
+        item.itemId,
+        {
+          'ItemOrder': item.itemOrder--,
+        },
+      );
+    }
   }
 
   Future<void> updateIsDeletedForItem(int? itemId) async {
@@ -97,6 +111,16 @@ class ItemProvider with ChangeNotifier {
 
     //Otherwise return the maximum itemOrder + 1
     return itemOrders.reduce((max, order) => order > max ? order : max) + 1;
+  }
+
+  List<Item> _getItemsToUpdateOrder(int itemId) {
+    Item completedItem = _items.firstWhere((item) => item.itemId == itemId);
+
+    List<Item> itemsItemOrderToUpdate = _items
+        .where((item) => !item.isCompleted && item.itemOrder > completedItem.itemOrder)
+        .toList();
+
+    return itemsItemOrderToUpdate;
   }
 
   //A method that can be used in debugging
