@@ -19,7 +19,7 @@ class ItemProvider with ChangeNotifier {
       itemName: itemName,
       dateAdded: date,
       categoryIdfK: categoryId,
-      itemOrder: _getNextItemOrder(),
+      itemOrder: _getNextAvailableItemOrder(),
     );
 
     _items.add(newItem);
@@ -58,27 +58,32 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> updateIsCompletedForItem(int? itemId, bool isCompleted) async {
-    DBHelper.updateWithId(
-      'item',
-      'ItemId = ?',
-      itemId,
-      {
-        'IsCompleted': isCompleted ? 1 : 0,
-      },
-    );
-    //Also need to update the ItemOrder for this newly completed item
+    //You can split this method up into 2 seperate methods
 
-    List<Item> itemOrdersToUpdate = _getItemsToUpdateOrder(itemId!);
-
-    for (var item in itemOrdersToUpdate) { 
+    if (isCompleted){
       DBHelper.updateWithId(
         'item',
         'ItemId = ?',
-        item.itemId,
+        itemId,
         {
-          'ItemOrder': item.itemOrder--,
+          'IsCompleted': isCompleted ? 1 : 0,
+          'ItemOrder': _getNextAvailableCompletedItemOrder(itemId!),
         },
       );
+      //Also need to update the ItemOrder for this newly completed item
+
+      List<Item> itemOrdersToUpdate = _getItemsToUpdateOrder(itemId!);
+
+      for (var item in itemOrdersToUpdate) { 
+        DBHelper.updateWithId(
+          'item',
+          'ItemId = ?',
+          item.itemId,
+          {
+            'ItemOrder': item.itemOrder - 1,
+          },
+        );
+      }
     }
   }
 
@@ -98,7 +103,7 @@ class ItemProvider with ChangeNotifier {
   }
 
   //Function to find the next available ItemOrder where isCompleted is false
-  int _getNextItemOrder() {
+  int _getNextAvailableItemOrder() {
     List<int> itemOrders = _items
         .where((item) => !item.isCompleted)
         .map((item) => item.itemOrder)
@@ -123,12 +128,29 @@ class ItemProvider with ChangeNotifier {
     return itemsItemOrderToUpdate;
   }
 
+  //Function to find the next available ItemOrder where isCompleted is true
+  int _getNextAvailableCompletedItemOrder(int itemId) {
+    List<int> itemOrders = _items
+        .where((item) => item.isCompleted)
+        .map((item) => item.itemOrder)
+        .toList();
+
+    //If there are no items with IsCompleted set to true then return 1
+    if (itemOrders.isEmpty) {
+      return 1;
+    }
+
+    //Otherwise return the maximum itemOrder + 1
+    return itemOrders.reduce((max, order) => order > max ? order : max) + 1;
+  }
+
   //A method that can be used in debugging
   void printItemsDebugMethod() {
     //print _items
     print('Printing records from item Table');
     _items.forEach((item) {
       //print("itemId: " + item.itemId.toString());
+      print("itemId: " + item.itemId.toString());
       print("itemName: " + item.itemName);
       print("itemOrder: " + item.itemOrder.toString());
       //print(item.dateAdded);
