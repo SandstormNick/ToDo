@@ -22,13 +22,13 @@ class _ItemNameCardState extends State<ItemNameCard> {
   void _onIsCompletedChanged(bool? newValue) => setState(
         () {
           if (newValue == true) {
+            Provider.of<ItemProvider>(context, listen: false)
+                .updateIsCompletedTrueForItem(widget.item.itemId);
             widget.item.isCompleted = true;
-            Provider.of<ItemProvider>(context, listen: false)
-                .updateIsCompletedForItem(widget.item.itemId, true);
           } else {
-            widget.item.isCompleted = false;
             Provider.of<ItemProvider>(context, listen: false)
-                .updateIsCompletedForItem(widget.item.itemId, false);
+                .updateIsCompletedFalseForItem(widget.item.itemId);
+            widget.item.isCompleted = false;
           }
           widget.notifiyParent();
         },

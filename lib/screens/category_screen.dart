@@ -68,15 +68,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   item: catItems.items[i],
                                   notifiyParent: refresh,
                                 ),
-                                //Temp - Remove
-                                TextButton(
-                                  onPressed: () {
-                                    ItemProvider ip = Provider.of<ItemProvider>(context, listen: false);
-                                    ip.printItemsDebugMethod();
-                                  },
-                                  child: const Text('Print Items'),
-                                ),
-                                //Temp - Remove
+                              //Temp - Remove
+                              TextButton(
+                                onPressed: () {
+                                  ItemProvider ip = Provider.of<ItemProvider>(
+                                      context,
+                                      listen: false);
+                                  ip.printItemsDebugMethod();
+                                },
+                                child: const Text('Print Items'),
+                              ),
+                              //Temp - Remove
                             ],
                           ),
                         ),

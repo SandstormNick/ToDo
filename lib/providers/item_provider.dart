@@ -25,7 +25,7 @@ class ItemProvider with ChangeNotifier {
     _items.add(newItem);
     notifyListeners();
 
-    printItemsDebugMethod();
+    //printItemsDebugMethod();
 
     final int insertedId = await DBHelper.insertReturnId('item', {
       'ItemName': newItem.itemName,
@@ -40,9 +40,14 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetItems(int categoryId) async {
-    final dataList = await DBHelper.getDataWithId('item',
-        'CategoryId_FK = ? AND IsDeleted = 0', 'IsCompleted', categoryId);
-    _items = dataList
+    //TO DO: Should split this in to seperate methods
+    final dataListPendingItems = await DBHelper.getDataWithId(
+        'item',
+        'CategoryId_FK = ? AND IsDeleted = 0 AND IsCompleted = 0',
+        'ItemOrder',
+        categoryId);
+
+    List<Item> pendingItems = dataListPendingItems
         .map(
           (mapItem) => Item(
             itemId: mapItem['ItemId'],
@@ -55,35 +60,69 @@ class ItemProvider with ChangeNotifier {
           ),
         )
         .toList();
+
+    final dataListCompletedItems = await DBHelper.getDataWithId(
+        'item',
+        'CategoryId_FK = ? AND IsDeleted = 0 AND IsCompleted = 1',
+        'ItemOrder DESC',
+        categoryId);
+
+    List<Item> completedItems = dataListCompletedItems
+        .map(
+          (mapItem) => Item(
+            itemId: mapItem['ItemId'],
+            itemName: mapItem['ItemName'],
+            isCompleted: mapItem['IsCompleted'] == 0 ? false : true,
+            isDeleted: mapItem['IsDeleted'] == 0 ? false : true,
+            dateAdded: DateTime.parse(mapItem['DateAdded']),
+            categoryIdfK: mapItem['CategoryId_FK'],
+            itemOrder: mapItem['ItemOrder'],
+          ),
+        )
+        .toList();
+
+    _items = [...pendingItems, ...completedItems];
   }
 
-  Future<void> updateIsCompletedForItem(int? itemId, bool isCompleted) async {
-    //You can split this method up into 2 seperate methods
+  //Function that is called when updating an item that is already marked complete
+  Future<void> updateIsCompletedFalseForItem(int? itemId) async {
+    DBHelper.updateWithId(
+      'item',
+      'ItemId = ?',
+      itemId,
+      {
+        'IsCompleted': 0,
+        'ItemOrder': _getNextAvailableItemOrder(),
+      },
+    );
 
-    if (isCompleted){
+    //TO DO: Need to update any remaining Completed item orders (if they need to be updated)
+  }
+
+  //Function that is called when updating an item as completed
+  //The selected item is updated along with the itemOrder of any other uncompleted items that precede this one
+  Future<void> updateIsCompletedTrueForItem(int? itemId) async {
+    DBHelper.updateWithId(
+      'item',
+      'ItemId = ?',
+      itemId,
+      {
+        'IsCompleted': 1,
+        'ItemOrder': _getNextAvailableCompletedItemOrder(itemId!),
+      },
+    );
+
+    List<Item> itemOrdersToUpdate = _getItemsToUpdateOrder(itemId);
+
+    for (var item in itemOrdersToUpdate) {
       DBHelper.updateWithId(
         'item',
         'ItemId = ?',
-        itemId,
+        item.itemId,
         {
-          'IsCompleted': isCompleted ? 1 : 0,
-          'ItemOrder': _getNextAvailableCompletedItemOrder(itemId!),
+          'ItemOrder': item.itemOrder - 1,
         },
       );
-      //Also need to update the ItemOrder for this newly completed item
-
-      List<Item> itemOrdersToUpdate = _getItemsToUpdateOrder(itemId!);
-
-      for (var item in itemOrdersToUpdate) { 
-        DBHelper.updateWithId(
-          'item',
-          'ItemId = ?',
-          item.itemId,
-          {
-            'ItemOrder': item.itemOrder - 1,
-          },
-        );
-      }
     }
   }
 
@@ -122,7 +161,8 @@ class ItemProvider with ChangeNotifier {
     Item completedItem = _items.firstWhere((item) => item.itemId == itemId);
 
     List<Item> itemsItemOrderToUpdate = _items
-        .where((item) => !item.isCompleted && item.itemOrder > completedItem.itemOrder)
+        .where((item) =>
+            !item.isCompleted && item.itemOrder > completedItem.itemOrder)
         .toList();
 
     return itemsItemOrderToUpdate;
