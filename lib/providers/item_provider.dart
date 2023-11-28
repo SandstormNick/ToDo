@@ -12,6 +12,7 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> addItem(String itemName, int categoryId) async {
+    //Might need to rework this method a little bit
     DateTime date = DateTime.now();
     date = DateTime(date.year, date.month, date.day);
 
@@ -22,6 +23,7 @@ class ItemProvider with ChangeNotifier {
       itemOrder: _getNextAvailableItemOrder(),
     );
 
+    //Why not move this to after the DBHelper.insertReturnId  ?
     _items.add(newItem);
     notifyListeners();
 
@@ -175,9 +177,6 @@ class ItemProvider with ChangeNotifier {
         );
       }
     }
-
-
-
 
     DBHelper.updateWithId(
       'item',
