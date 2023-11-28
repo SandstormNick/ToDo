@@ -23,10 +23,6 @@ class ItemProvider with ChangeNotifier {
       itemOrder: _getNextAvailableItemOrder(),
     );
 
-    //Why not move this to after the DBHelper.insertReturnId  ?
-    _items.add(newItem);
-    notifyListeners();
-
     //printItemsDebugMethod();
 
     final int insertedId = await DBHelper.insertReturnId('item', {
@@ -38,11 +34,14 @@ class ItemProvider with ChangeNotifier {
       'ItemOrder': newItem.itemOrder,
     });
 
-    items.last.itemId = insertedId;
+    newItem.itemId = insertedId;
+
+    //Need to add the new Item to the appropriate place in the _items list
+    _items.insert(newItem.itemOrder - 1, newItem);
+    notifyListeners();
   }
 
   Future<void> fetchAndSetItems(int categoryId) async {
-    //TO DO: Should split this in to seperate methods
     final dataListPendingItems = await DBHelper.getDataWithId(
         'item',
         'CategoryId_FK = ? AND IsDeleted = 0 AND IsCompleted = 0',
