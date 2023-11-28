@@ -85,6 +85,7 @@ class ItemProvider with ChangeNotifier {
   }
 
   //Function that is called when updating an item that is already marked complete
+  //The selected item is updated along with the itemOrder of any other completed items that precede this one
   Future<void> updateIsCompletedFalseForItem(int? itemId) async {
     DBHelper.updateWithId(
       'item',
@@ -113,7 +114,7 @@ class ItemProvider with ChangeNotifier {
   }
 
   //Function that is called when updating an item as completed
-  //The selected item is updated along with the itemOrder of any other uncompleted items that precede this one
+  //The selected item is updated along with the itemOrder of any other pending items that precede this one
   Future<void> updateIsCompletedTrueForItem(int? itemId) async {
     DBHelper.updateWithId(
       'item',
@@ -140,12 +141,51 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> updateIsDeletedForItem(int? itemId) async {
+    //TO DO: Need to test this method
+
+    Item deletedItem = _items.firstWhere((item) => item.itemId == itemId);
+
+    if (deletedItem.isCompleted) {
+      //Deleting a Completed item
+      List<Item> itemOrdersToUpdate = _getItemsCompletedToUpdateOrder(itemId!);
+
+      for (var item in itemOrdersToUpdate) {
+        DBHelper.updateWithId(
+          'item',
+          'ItemId = ?',
+          item.itemId,
+          {
+            'ItemOrder': item.itemOrder - 1,
+          },
+        );
+      }
+    }
+    else {
+      //Deleting a Pending item
+      List<Item> itemOrdersToUpdate = _getItemsPendingToUpdateOrder(itemId!);
+
+      for (var item in itemOrdersToUpdate) {
+        DBHelper.updateWithId(
+          'item',
+          'ItemId = ?',
+          item.itemId,
+          {
+            'ItemOrder': item.itemOrder - 1,
+          },
+        );
+      }
+    }
+
+
+
+
     DBHelper.updateWithId(
       'item',
       'ItemId = ?',
       itemId,
       {
         'IsDeleted': 1,
+        'ItemOrder': -1,
       },
     );
     int index = _items.indexWhere((item) => item.itemId == itemId);
