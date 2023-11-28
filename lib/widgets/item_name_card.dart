@@ -45,6 +45,8 @@ class _ItemNameCardState extends State<ItemNameCard> {
         () {
           Provider.of<ItemProvider>(context, listen: false)
               .updateIsDeletedForItem(widget.item.itemId);
+
+          widget.notifiyParent();
         },
       );
 

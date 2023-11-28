@@ -99,9 +99,7 @@ class ItemProvider with ChangeNotifier {
       },
     );
 
-    //TO DO: Need to test the below code
     List<Item> itemOrdersToUpdate = _getItemsCompletedToUpdateOrder(itemId!);
-
 
     for (var item in itemOrdersToUpdate) {
       DBHelper.updateWithId(
@@ -143,8 +141,6 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> updateIsDeletedForItem(int? itemId) async {
-    //TO DO: Need to test this method
-
     Item deletedItem = _items.firstWhere((item) => item.itemId == itemId);
 
     if (deletedItem.isCompleted) {
@@ -161,8 +157,7 @@ class ItemProvider with ChangeNotifier {
           },
         );
       }
-    }
-    else {
+    } else {
       //Deleting a Pending item
       List<Item> itemOrdersToUpdate = _getItemsPendingToUpdateOrder(itemId!);
 
@@ -221,7 +216,6 @@ class ItemProvider with ChangeNotifier {
   }
 
   List<Item> _getItemsCompletedToUpdateOrder(int itemId) {
-    //TO DO: This function needs to be tested
     Item pendingItem = _items.firstWhere((item) => item.itemId == itemId);
 
     List<Item> itemsItemOrderToUpdate = _items
