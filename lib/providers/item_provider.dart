@@ -96,7 +96,20 @@ class ItemProvider with ChangeNotifier {
       },
     );
 
-    //TO DO: Need to update any remaining Completed item orders (if they need to be updated)
+    //TO DO: Need to test the below code
+    List<Item> itemOrdersToUpdate = _getItemsCompletedToUpdateOrder(itemId!);
+
+
+    for (var item in itemOrdersToUpdate) {
+      DBHelper.updateWithId(
+        'item',
+        'ItemId = ?',
+        item.itemId,
+        {
+          'ItemOrder': item.itemOrder - 1,
+        },
+      );
+    }
   }
 
   //Function that is called when updating an item as completed
@@ -112,7 +125,7 @@ class ItemProvider with ChangeNotifier {
       },
     );
 
-    List<Item> itemOrdersToUpdate = _getItemsToUpdateOrder(itemId);
+    List<Item> itemOrdersToUpdate = _getItemsPendingToUpdateOrder(itemId);
 
     for (var item in itemOrdersToUpdate) {
       DBHelper.updateWithId(
@@ -157,12 +170,24 @@ class ItemProvider with ChangeNotifier {
     return itemOrders.reduce((max, order) => order > max ? order : max) + 1;
   }
 
-  List<Item> _getItemsToUpdateOrder(int itemId) {
+  List<Item> _getItemsPendingToUpdateOrder(int itemId) {
     Item completedItem = _items.firstWhere((item) => item.itemId == itemId);
 
     List<Item> itemsItemOrderToUpdate = _items
         .where((item) =>
             !item.isCompleted && item.itemOrder > completedItem.itemOrder)
+        .toList();
+
+    return itemsItemOrderToUpdate;
+  }
+
+  List<Item> _getItemsCompletedToUpdateOrder(int itemId) {
+    //TO DO: This function needs to be tested
+    Item pendingItem = _items.firstWhere((item) => item.itemId == itemId);
+
+    List<Item> itemsItemOrderToUpdate = _items
+        .where((item) =>
+            item.isCompleted && item.itemOrder > pendingItem.itemOrder)
         .toList();
 
     return itemsItemOrderToUpdate;
