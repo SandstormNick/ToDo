@@ -1,15 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/category.dart';
 
 import '../helpers/db_helper.dart';
 
-class CategoryProvider with ChangeNotifier {
-  List<Category> _items = [];
-
-  List<Category> get items {
-    return [..._items];
-  }
+class CategoryNotifier extends StateNotifier<List<Category>> {
+  CategoryNotifier() : super([]);
 
   Future<void> addCategory(String catName) async {
     final newCategory = Category(
@@ -17,21 +13,20 @@ class CategoryProvider with ChangeNotifier {
       categoryName: catName,
     );
 
-    _items.add(newCategory);
-    notifyListeners();
+    state = [...state, newCategory];
 
     final int insertedId = await DBHelper.insertReturnId('category', {
       'CategoryName': newCategory.categoryName,
       'IsDeleted': 0,
     });
 
-    _items.last.categoryId = insertedId;
+    state.last.categoryId = insertedId;
   }
 
   Future<void> fetchAndSetCategories() async {
     final dataList =
         await DBHelper.getDataNotDeleted('category', 'IsDeleted = 0');
-    _items = dataList
+    state = dataList
         .map(
           (mapItem) => Category(
             categoryId: mapItem['CategoryId'],
@@ -40,8 +35,6 @@ class CategoryProvider with ChangeNotifier {
           ),
         )
         .toList();
-
-    notifyListeners();
   }
 
   Future<void> updateIsDeletedForCategory(int? categoryId) async {
@@ -53,9 +46,12 @@ class CategoryProvider with ChangeNotifier {
         'IsDeleted': 1,
       },
     );
-    int index = _items.indexWhere((cat) => cat.categoryId == categoryId);
-    _items.removeAt(index);
 
-    notifyListeners();
+    state = state.where((cat) => cat.categoryId != categoryId).toList();
   }
 }
+
+final categoryProvider =
+    StateNotifierProvider<CategoryNotifier, List<Category>>((ref) {
+  return CategoryNotifier();
+});

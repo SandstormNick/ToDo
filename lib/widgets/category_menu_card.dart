@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/category_provider.dart';
 
@@ -8,7 +8,7 @@ import '../models/category.dart';
 
 import '../screens/category_screen.dart';
 
-class CategoryMenuCard extends StatefulWidget {
+class CategoryMenuCard extends ConsumerStatefulWidget {
   final Category category;
 
   const CategoryMenuCard({
@@ -17,16 +17,19 @@ class CategoryMenuCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CategoryMenuCard> createState() => _CategoryMenuCardState();
+  ConsumerState<CategoryMenuCard> createState() => _CategoryMenuCardState();
 }
 
-class _CategoryMenuCardState extends State<CategoryMenuCard> {
-  void _onDeletedPressed() => setState(() {
-        Provider.of<CategoryProvider>(context, listen: false)
-            .updateIsDeletedForCategory(widget.category.categoryId);
+class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
+  void _onDeletedPressed() => setState(
+        () {
+          ref
+              .watch(categoryProvider.notifier)
+              .updateIsDeletedForCategory(widget.category.categoryId);
 
-        Navigator.of(context).pop(true);
-      });
+          Navigator.of(context).pop(true);
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
