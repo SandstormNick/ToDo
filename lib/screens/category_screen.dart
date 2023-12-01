@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/category.dart';
 
@@ -9,17 +9,17 @@ import '../screens/add_item_screen.dart';
 
 import '../widgets/item_name_card.dart';
 
-class CategoryScreen extends StatefulWidget {
+class CategoryScreen extends ConsumerStatefulWidget {
   static const routeName = 'category';
   //final int categoryId;
 
   const CategoryScreen({Key? key}) : super(key: key);
 
   @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
+  ConsumerState<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   refresh() {
     setState(() {});
   }
@@ -27,7 +27,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Category;
-    print(args.categoryId);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,44 +45,46 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: Provider.of<ItemProvider>(context, listen: false)
-            .fetchAndSetItems(args.categoryId),
-        builder: (context, snapshot) => snapshot.connectionState ==
-                ConnectionState.waiting
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Consumer<ItemProvider>(
-                child: const Center(
-                  child: Text('Add an item'),
-                ),
-                builder: (context, catItems, child) => catItems.items.isEmpty
-                    ? child!
-                    : SingleChildScrollView(
-                        child: Center(
-                          child: Column(
-                            children: [
-                              for (int i = 0; i < catItems.items.length; i++)
-                                ItemNameCard(
-                                  item: catItems.items[i],
-                                  notifiyParent: refresh,
+        future:
+            ref.read(itemProvider.notifier).fetchAndSetItems(args.categoryId),
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Consumer(
+                    child: const Center(
+                      child: Text('Add an item'),
+                    ),
+                    builder: (context, ref, child) =>
+                        ref.watch(itemProvider).isEmpty
+                            ? child!
+                            : SingleChildScrollView(
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      for (int i = 0;
+                                          i < ref.watch(itemProvider).length;
+                                          i++)
+                                        ItemNameCard(
+                                          item: ref.watch(itemProvider)[i],
+                                          notifiyParent: refresh,
+                                        ),
+                                      //Temp - Remove
+                                      TextButton(
+                                        onPressed: () {
+                                          ref
+                                              .watch(itemProvider.notifier)
+                                              .printItemsDebugMethod();
+                                        },
+                                        child: const Text('Print Items'),
+                                      ),
+                                      //Temp - Remove
+                                    ],
+                                  ),
                                 ),
-                              //Temp - Remove
-                              TextButton(
-                                onPressed: () {
-                                  ItemProvider ip = Provider.of<ItemProvider>(
-                                      context,
-                                      listen: false);
-                                  ip.printItemsDebugMethod();
-                                },
-                                child: const Text('Print Items'),
                               ),
-                              //Temp - Remove
-                            ],
-                          ),
-                        ),
-                      ),
-              ),
+                  ),
       ),
     );
   }

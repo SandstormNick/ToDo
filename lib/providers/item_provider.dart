@@ -1,15 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/item.dart';
 
 import '../helpers/db_helper.dart';
 
-class ItemProvider with ChangeNotifier {
-  List<Item> _items = [];
-
-  List<Item> get items {
-    return [..._items];
-  }
+class ItemNotifier extends StateNotifier<List<Item>> {
+  ItemNotifier() : super([]);
 
   Future<void> addItem(String itemName, int categoryId) async {
     //Might need to rework this method a little bit
@@ -37,8 +33,8 @@ class ItemProvider with ChangeNotifier {
     newItem.itemId = insertedId;
 
     //Need to add the new Item to the appropriate place in the _items list
-    _items.insert(newItem.itemOrder - 1, newItem);
-    notifyListeners();
+    state.insert(newItem.itemOrder - 1, newItem);
+    state = [...state];
   }
 
   Future<void> fetchAndSetItems(int categoryId) async {
@@ -82,7 +78,7 @@ class ItemProvider with ChangeNotifier {
         )
         .toList();
 
-    _items = [...pendingItems, ...completedItems];
+    state = [...pendingItems, ...completedItems];
   }
 
   //Function that is called when updating an item that is already marked complete
@@ -140,7 +136,7 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> updateIsDeletedForItem(int? itemId) async {
-    Item deletedItem = _items.firstWhere((item) => item.itemId == itemId);
+    Item deletedItem = state.firstWhere((item) => item.itemId == itemId);
 
     if (deletedItem.isCompleted) {
       //Deleting a Completed item
@@ -181,15 +177,13 @@ class ItemProvider with ChangeNotifier {
         'ItemOrder': -1,
       },
     );
-    int index = _items.indexWhere((item) => item.itemId == itemId);
-    _items.removeAt(index);
 
-    notifyListeners();
+    state = state.where((item) => item.itemId != itemId).toList();
   }
 
   //Function to find the next available ItemOrder where isCompleted is false
   int _getNextAvailableItemOrder() {
-    List<int> itemOrders = _items
+    List<int> itemOrders = state
         .where((item) => !item.isCompleted)
         .map((item) => item.itemOrder)
         .toList();
@@ -204,9 +198,9 @@ class ItemProvider with ChangeNotifier {
   }
 
   List<Item> _getItemsPendingToUpdateOrder(int itemId) {
-    Item completedItem = _items.firstWhere((item) => item.itemId == itemId);
+    Item completedItem = state.firstWhere((item) => item.itemId == itemId);
 
-    List<Item> itemsItemOrderToUpdate = _items
+    List<Item> itemsItemOrderToUpdate = state
         .where((item) =>
             !item.isCompleted && item.itemOrder > completedItem.itemOrder)
         .toList();
@@ -215,9 +209,9 @@ class ItemProvider with ChangeNotifier {
   }
 
   List<Item> _getItemsCompletedToUpdateOrder(int itemId) {
-    Item pendingItem = _items.firstWhere((item) => item.itemId == itemId);
+    Item pendingItem = state.firstWhere((item) => item.itemId == itemId);
 
-    List<Item> itemsItemOrderToUpdate = _items
+    List<Item> itemsItemOrderToUpdate = state
         .where((item) =>
             item.isCompleted && item.itemOrder > pendingItem.itemOrder)
         .toList();
@@ -227,7 +221,7 @@ class ItemProvider with ChangeNotifier {
 
   //Function to find the next available ItemOrder where isCompleted is true
   int _getNextAvailableCompletedItemOrder(int itemId) {
-    List<int> itemOrders = _items
+    List<int> itemOrders = state
         .where((item) => item.isCompleted)
         .map((item) => item.itemOrder)
         .toList();
@@ -245,7 +239,7 @@ class ItemProvider with ChangeNotifier {
   void printItemsDebugMethod() {
     //print _items
     print('Printing records from item Table');
-    _items.forEach((item) {
+    state.forEach((item) {
       //print("itemId: " + item.itemId.toString());
       print("itemId: " + item.itemId.toString());
       print("itemName: " + item.itemName);
@@ -254,3 +248,7 @@ class ItemProvider with ChangeNotifier {
     });
   }
 }
+
+final itemProvider = StateNotifierProvider<ItemNotifier, List<Item>>((ref) {
+  return ItemNotifier();
+});

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'screens/categories_screen.dart';
 import 'screens/add_category_screen.dart';
 import 'screens/category_screen.dart';
 import 'screens/add_item_screen.dart';
-
-import 'providers/item_provider.dart'; //Gotsa Go!
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../models/item.dart';
 
 import '../providers/item_provider.dart';
 
-class ItemNameCard extends StatefulWidget {
+class ItemNameCard extends ConsumerStatefulWidget {
   final Item item;
   final Function() notifiyParent;
 
@@ -15,18 +15,20 @@ class ItemNameCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ItemNameCard> createState() => _ItemNameCardState();
+  ConsumerState<ItemNameCard> createState() => _ItemNameCardState();
 }
 
-class _ItemNameCardState extends State<ItemNameCard> {
+class _ItemNameCardState extends ConsumerState<ItemNameCard> {
   void _onIsCompletedChanged(bool? newValue) => setState(
         () {
           if (newValue == true) {
-            Provider.of<ItemProvider>(context, listen: false)
+            ref
+                .watch(itemProvider.notifier)
                 .updateIsCompletedTrueForItem(widget.item.itemId);
             widget.item.isCompleted = true;
           } else {
-            Provider.of<ItemProvider>(context, listen: false)
+            ref
+                .watch(itemProvider.notifier)
                 .updateIsCompletedFalseForItem(widget.item.itemId);
             widget.item.isCompleted = false;
           }
@@ -34,16 +36,11 @@ class _ItemNameCardState extends State<ItemNameCard> {
         },
       );
 
-  // void _onDeletedPressed(BuildContext context) => setState(
-  //       () {
-  //         Provider.of<ItemProvider>(context, listen: false)
-  //             .updateIsDeletedForItem(widget.item.itemId);
-  //       },
-  //     );
-
   void _onDeletedPressed() => setState(
         () {
-          Provider.of<ItemProvider>(context, listen: false)
+          //Should I be setting state still?
+          ref
+              .watch(itemProvider.notifier)
               .updateIsDeletedForItem(widget.item.itemId);
 
           widget.notifiyParent();

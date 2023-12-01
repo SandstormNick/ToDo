@@ -23,6 +23,7 @@ class CategoryMenuCard extends ConsumerStatefulWidget {
 class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
   void _onDeletedPressed() => setState(
         () {
+          //I wonder if need to be setting state like this now?
           ref
               .watch(categoryProvider.notifier)
               .updateIsDeletedForCategory(widget.category.categoryId);
