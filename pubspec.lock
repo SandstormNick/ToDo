@@ -114,7 +114,8 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      url: "https://pub.dartlang.org"
+      sha256: eee9148b4236b53a8b292be56ea5aca0bca4457609287df0c2d4b74152e4448d
+      url: "https://pub.dev"
     source: hosted
     version: "1.0.3+1"
   flutter_slidable:
@@ -222,7 +223,8 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      url: "https://pub.dartlang.org"
+      sha256: "98f9ac5421833f6aa3c44bc6f2f586d72dc241e03b3da1618cde8124d83e4485"
+      url: "https://pub.dev"
     source: hosted
     version: "1.0.3+1"
   sky_engine:
@@ -266,7 +268,8 @@ packages:
     dependency: transitive
     description:
       name: state_notifier
-      url: "https://pub.dartlang.org"
+      sha256: "8fe42610f179b843b12371e40db58c9444f8757f8b69d181c97e50787caed289"
+      url: "https://pub.dev"
     source: hosted
     version: "0.7.2+1"
   stream_channel:
