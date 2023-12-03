@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/item_provider.dart';
 
 import '../models/category.dart';
 
-class AddItemScreen extends StatefulWidget {
+class AddItemScreen extends ConsumerStatefulWidget {
   static const routeName = 'add-item';
 
   const AddItemScreen({Key? key}) : super(key: key);
 
   @override
-  _AddItemScreenState createState() => _AddItemScreenState();
+  ConsumerState<AddItemScreen> createState() => _AddItemScreenState();
 }
 
-class _AddItemScreenState extends State<AddItemScreen> {
+class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   final _itemNameController = TextEditingController();
 
   void _saveItem(int categoryId) {
     if (_itemNameController.text.isEmpty) {
       return;
     }
-    print(categoryId);
-    Provider.of<ItemProvider>(context, listen: false).addItem(
-      _itemNameController.text,
-      categoryId, //pass through categoryid
-    );
+
+    ref.watch(itemProvider.notifier).addItem(
+          _itemNameController.text,
+          categoryId,
+        );
+
     Navigator.of(context).pop();
   }
 

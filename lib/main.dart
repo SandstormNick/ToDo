@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'screens/categories_screen.dart';
 import 'screens/add_category_screen.dart';
 import 'screens/category_screen.dart';
 import 'screens/add_item_screen.dart';
 
-import 'providers/category_provider.dart';
-import 'providers/item_provider.dart';
-
 void main() {
-  //runApp(const MyApp());
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => CategoryProvider()),
-      ChangeNotifierProvider(create: (context) => ItemProvider()),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

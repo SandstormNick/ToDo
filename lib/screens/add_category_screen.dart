@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/category_provider.dart';
 
-class AddCategoryScreen extends StatefulWidget {
+class AddCategoryScreen extends ConsumerStatefulWidget {
   static const routeName = 'add-category';
 
   const AddCategoryScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddCategoryScreen> createState() => _AddCategoryScreenState();
+  ConsumerState<AddCategoryScreen> createState() => _AddCategoryScreenState();
 }
 
-class _AddCategoryScreenState extends State<AddCategoryScreen> {
+class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
   final _categoryNameController = TextEditingController();
 
   void _saveCategory() {
     if (_categoryNameController.text.isEmpty) {
       return;
     }
-    Provider.of<CategoryProvider>(context, listen: false).addCategory(
-      _categoryNameController.text,
-    );
+
+    ref
+        .watch(categoryProvider.notifier)
+        .addCategory(_categoryNameController.text);
+
     Navigator.of(context).pop();
   }
 
