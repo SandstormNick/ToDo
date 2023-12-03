@@ -77,7 +77,7 @@ class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
         height: 100,
         child: Card(
           child: InkWell(
-            splashColor: Colors.green,
+            splashColor: Theme.of(context).splashColor,
             onTap: () {
               Navigator.pushNamed(
                 context,

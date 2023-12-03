@@ -6,6 +6,11 @@ import 'screens/add_category_screen.dart';
 import 'screens/category_screen.dart';
 import 'screens/add_item_screen.dart';
 
+var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.green);
+var kDarkColorScheme = ColorScheme.fromSeed(
+  seedColor: const Color.fromARGB(255, 26, 100, 28),
+);
+
 void main() {
   runApp(
     const ProviderScope(
@@ -21,8 +26,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ToDo List',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: kDarkColorScheme,
+        appBarTheme: const AppBarTheme().copyWith(
+          backgroundColor: kDarkColorScheme.onPrimaryContainer,
+          foregroundColor: kDarkColorScheme.primaryContainer,
+        ),
+      ),
+      theme: ThemeData().copyWith(
+        colorScheme: kColorScheme,
+        appBarTheme: const AppBarTheme().copyWith(
+            backgroundColor: kColorScheme.onPrimaryContainer,
+            foregroundColor: kColorScheme.primaryContainer),
       ),
       home: CategoriesScreen(
         key: key,
