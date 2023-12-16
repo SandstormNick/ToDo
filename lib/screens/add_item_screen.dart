@@ -48,6 +48,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      autofocus: true,
                       decoration: const InputDecoration(labelText: 'Item name'),
                       controller: _itemNameController,
                     )

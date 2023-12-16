@@ -43,6 +43,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      autofocus: true,
                       decoration: const InputDecoration(
                         labelText: 'Category name',
                       ),
