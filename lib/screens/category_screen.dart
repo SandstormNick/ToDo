@@ -70,16 +70,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                           item: ref.watch(itemProvider)[i],
                                           notifiyParent: refresh,
                                         ),
-                                      //Temp - Remove
-                                      TextButton(
-                                        onPressed: () {
-                                          ref
-                                              .watch(itemProvider.notifier)
-                                              .printItemsDebugMethod();
-                                        },
-                                        child: const Text('Print Items'),
-                                      ),
-                                      //Temp - Remove
                                     ],
                                   ),
                                 ),

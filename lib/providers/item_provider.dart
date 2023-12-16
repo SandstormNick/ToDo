@@ -237,13 +237,13 @@ class ItemNotifier extends StateNotifier<List<Item>> {
 
   //A method that can be used in debugging
   void printItemsDebugMethod() {
-    //print _items
-    print('Printing records from item Table');
+    //print _items -uncomment the print to utilize
+    //print('Printing records from item Table');
     state.forEach((item) {
       //print("itemId: " + item.itemId.toString());
-      print("itemId: " + item.itemId.toString());
-      print("itemName: " + item.itemName);
-      print("itemOrder: " + item.itemOrder.toString());
+      //print("itemId: " + item.itemId.toString());
+      //print("itemName: " + item.itemName);
+      //print("itemOrder: " + item.itemOrder.toString());
       //print(item.dateAdded);
     });
   }
