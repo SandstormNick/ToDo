@@ -85,12 +85,15 @@ class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
                 arguments: widget.category,
               );
             },
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(widget.category.categoryName),
-                )
-              ],
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(widget.category.categoryName),
+                  )
+                ],
+              ),
             ),
           ),
         ),
