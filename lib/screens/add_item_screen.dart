@@ -15,54 +15,67 @@ class AddItemScreen extends ConsumerStatefulWidget {
 }
 
 class _AddItemScreenState extends ConsumerState<AddItemScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   final _itemNameController = TextEditingController();
 
-  void _saveItem(int categoryId) {
-    if (_itemNameController.text.isEmpty) {
-      return;
+  String? _validateItemName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter some text.';
     }
+    return null;
+  }
 
-    ref.watch(itemProvider.notifier).addItem(
+  void _saveItem(int categoryId) {
+    if (_formKey.currentState!.validate()) {
+      ref.watch(itemProvider.notifier).addItem(
           _itemNameController.text,
           categoryId,
         );
 
-    Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Category;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Item'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      autofocus: true,
-                      decoration: const InputDecoration(labelText: 'Item name'),
-                      controller: _itemNameController,
-                    )
-                  ],
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Add Item'),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _itemNameController,
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Item name',
+                        ),
+                        validator: _validateItemName,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          ElevatedButton.icon(
-            onPressed: () => _saveItem(args.categoryId),
-            icon: const Icon(Icons.add),
-            label: const Text('Add Item'),
-          ),
-        ],
+            ElevatedButton.icon(
+              onPressed: () => _saveItem(args.categoryId),
+              icon: const Icon(Icons.add),
+              label: const Text('Add Item'),
+            )
+          ],
+        ),
       ),
     );
   }
