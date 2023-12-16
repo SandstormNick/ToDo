@@ -13,53 +13,65 @@ class AddCategoryScreen extends ConsumerStatefulWidget {
 }
 
 class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   final _categoryNameController = TextEditingController();
 
-  void _saveCategory() {
-    if (_categoryNameController.text.isEmpty) {
-      return;
+  String? _validateCategoryName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter some text.';
     }
+    return null;
+  }
 
-    ref
+  void _saveCategory() {
+
+    if (_formKey.currentState!.validate()) {
+      ref
         .watch(categoryProvider.notifier)
         .addCategory(_categoryNameController.text);
 
-    Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Category'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Category name',
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Add Category'),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _categoryNameController,
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Category name',
+                        ),
+                        validator: _validateCategoryName,
                       ),
-                      controller: _categoryNameController,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          ElevatedButton.icon(
-            onPressed: _saveCategory,
-            icon: const Icon(Icons.add),
-            label: const Text('Add Category'),
-          )
-        ],
+            ElevatedButton.icon(
+              onPressed: _saveCategory,
+              icon: const Icon(Icons.add),
+              label: const Text('Add Category'),
+            )
+          ],
+        ),
       ),
     );
   }
