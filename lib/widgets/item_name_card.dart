@@ -84,7 +84,10 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
                 ),
               ),
               Expanded(
-                child: Text(widget.item.itemName),
+                child: Text(
+                  widget.item.itemName,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               )
             ],
           ),

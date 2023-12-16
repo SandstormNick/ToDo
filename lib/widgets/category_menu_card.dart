@@ -90,7 +90,10 @@ class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text(widget.category.categoryName),
+                    child: Text(
+                      widget.category.categoryName, 
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   )
                 ],
               ),

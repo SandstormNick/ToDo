@@ -26,18 +26,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ToDo List',
-      darkTheme: ThemeData.dark().copyWith(
-        colorScheme: kDarkColorScheme,
+      theme: ThemeData().copyWith(
         appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: kDarkColorScheme.onPrimaryContainer,
-          foregroundColor: kDarkColorScheme.primaryContainer,
+            backgroundColor: kColorScheme.primaryContainer,
+            foregroundColor: kColorScheme.onPrimaryContainer,
+        ),
+        colorScheme: kColorScheme,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: const ButtonStyle().copyWith(
+            backgroundColor: MaterialStatePropertyAll(kDarkColorScheme.primaryContainer),
+            foregroundColor: MaterialStatePropertyAll(kDarkColorScheme.onPrimaryContainer),
+          ),
         ),
       ),
-      theme: ThemeData().copyWith(
-        colorScheme: kColorScheme,
+      darkTheme: ThemeData.dark().copyWith(
         appBarTheme: const AppBarTheme().copyWith(
-            backgroundColor: kColorScheme.onPrimaryContainer,
-            foregroundColor: kColorScheme.primaryContainer),
+          backgroundColor: kDarkColorScheme.primaryContainer,
+          foregroundColor: kDarkColorScheme.onPrimaryContainer,
+        ),
+        colorScheme: kDarkColorScheme,
+        cardTheme: CardTheme(
+          color: kDarkColorScheme.onPrimaryContainer,
+          elevation: 2.0
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: const ButtonStyle().copyWith(
+            backgroundColor: MaterialStatePropertyAll(kDarkColorScheme.primaryContainer),
+            foregroundColor: MaterialStatePropertyAll(kDarkColorScheme.onPrimaryContainer),
+          ),
+        ),
       ),
       home: CategoriesScreen(
         key: key,
