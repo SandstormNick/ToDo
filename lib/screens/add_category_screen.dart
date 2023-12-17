@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/category_provider.dart';
 
+import '../widgets/alert_dialog.dart';
+
 class AddCategoryScreen extends ConsumerStatefulWidget {
   static const routeName = 'add-category';
 
@@ -24,14 +26,37 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
     return null;
   }
 
-  void _saveCategory() {
+  Future<bool> _showAlertDialog() async {
+    return await showDialog (
+      context: context,
+      builder: (context) => const CustomAlertDialog(
+        alertType: 'Category'
+        ),
+    );
+  }
+
+  Future<void> _saveCategory() async {
 
     if (_formKey.currentState!.validate()) {
-      ref
-        .watch(categoryProvider.notifier)
-        .addCategory(_categoryNameController.text);
+      var newCategoryName = _categoryNameController.text;
 
-      Navigator.of(context).pop();
+      if (ref.watch(categoryProvider.notifier).checkIfCategoryExists(newCategoryName)){
+        bool addAnyway = await _showAlertDialog();
+        if (addAnyway){
+          ref
+            .watch(categoryProvider.notifier)
+            .addCategory(newCategoryName);
+
+          Navigator.of(context).pop();
+        }
+      }
+      else {
+        ref
+          .watch(categoryProvider.notifier)
+          .addCategory(newCategoryName);
+
+        Navigator.of(context).pop();
+      }
     }
   }
 

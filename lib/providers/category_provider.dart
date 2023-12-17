@@ -49,6 +49,10 @@ class CategoryNotifier extends StateNotifier<List<Category>> {
 
     state = state.where((cat) => cat.categoryId != categoryId).toList();
   }
+
+  bool checkIfCategoryExists(String newCategoryName) {
+    return state.any((category) => category.categoryName == newCategoryName);
+  }
 }
 
 final categoryProvider =
