@@ -5,6 +5,8 @@ import '../providers/item_provider.dart';
 
 import '../models/category.dart';
 
+import '../widgets/alert_dialog.dart';
+
 class AddItemScreen extends ConsumerStatefulWidget {
   static const routeName = 'add-item';
 
@@ -26,14 +28,39 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
     return null;
   }
 
-  void _saveItem(int categoryId) {
+  Future<bool> _showAlertDialog() async {
+    return await showDialog (
+      context: context,
+      builder: (context) => const CustomAlertDialog(
+        alertType: 'Item'
+        ),
+    );
+  }
+
+  Future<void> _saveItem(int categoryId) async {
     if (_formKey.currentState!.validate()) {
-      ref.watch(itemProvider.notifier).addItem(
+      var newItemName = _itemNameController.text;
+
+      if (ref.watch(itemProvider.notifier).checkIfItemExists(newItemName)) {
+        bool addAnyway = await _showAlertDialog();
+
+        if (addAnyway) {
+          ref.watch(itemProvider.notifier).addItem(
+            _itemNameController.text,
+            categoryId,
+          );
+
+          Navigator.of(context).pop();
+        }
+      }
+      else {
+        ref.watch(itemProvider.notifier).addItem(
           _itemNameController.text,
           categoryId,
         );
 
-      Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      }
     }
   }
 

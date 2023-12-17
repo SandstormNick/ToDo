@@ -40,7 +40,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
     if (_formKey.currentState!.validate()) {
       var newCategoryName = _categoryNameController.text;
 
-      if (ref.watch(categoryProvider.notifier).checkIfCategoryExists(newCategoryName)){
+      if (ref.watch(categoryProvider.notifier).checkIfCategoryExists(newCategoryName)) {
         bool addAnyway = await _showAlertDialog();
         if (addAnyway){
           ref

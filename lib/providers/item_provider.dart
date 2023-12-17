@@ -181,6 +181,10 @@ class ItemNotifier extends StateNotifier<List<Item>> {
     state = state.where((item) => item.itemId != itemId).toList();
   }
 
+  bool checkIfItemExists(String newItemName) {
+    return state.any((item) => item.itemName == newItemName);
+  }
+
   //Function to find the next available ItemOrder where isCompleted is false
   int _getNextAvailableItemOrder() {
     List<int> itemOrders = state
