@@ -47,6 +47,13 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
         },
       );
 
+  String formatDate(DateTime dateTime) {
+    var year = dateTime.year.toString();
+    var month = dateTime.month.toString();
+    var day = dateTime.day.toString();
+    return "$day/$month/$year";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -88,7 +95,8 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
                   widget.item.itemName,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-              )
+              ),
+              Text(formatDate(widget.item.dateAdded)),
             ],
           ),
         ),
