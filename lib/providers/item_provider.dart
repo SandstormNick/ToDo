@@ -28,6 +28,7 @@ class ItemNotifier extends StateNotifier<List<Item>> {
       'IsDeleted': 0,
       'DateAdded': newItem.dateAdded.toString(),
       'ItemOrder': newItem.itemOrder,
+      'IsPinned': 0
     });
 
     newItem.itemId = insertedId;
@@ -54,6 +55,7 @@ class ItemNotifier extends StateNotifier<List<Item>> {
             dateAdded: DateTime.parse(mapItem['DateAdded']),
             categoryIdfK: mapItem['CategoryId_FK'],
             itemOrder: mapItem['ItemOrder'],
+            isPinned: mapItem['IsPinned'] == 0 ? false : true,
           ),
         )
         .toList();
@@ -74,6 +76,7 @@ class ItemNotifier extends StateNotifier<List<Item>> {
             dateAdded: DateTime.parse(mapItem['DateAdded']),
             categoryIdfK: mapItem['CategoryId_FK'],
             itemOrder: mapItem['ItemOrder'],
+            isPinned: mapItem['IsPinned'] == 0 ? false : true,
           ),
         )
         .toList();

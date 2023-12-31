@@ -96,6 +96,7 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
+              widget.item.isPinned ? const Icon(Icons.push_pin) : const Icon(Icons.push_pin_outlined),
               Text(formatDate(widget.item.dateAdded)),
             ],
           ),

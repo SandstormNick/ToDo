@@ -6,6 +6,7 @@ class Item {
   DateTime dateAdded;
   int categoryIdfK;
   int itemOrder;
+  bool isPinned;
 
   Item({
     this.itemId,
@@ -15,5 +16,6 @@ class Item {
     required this.dateAdded,
     required this.categoryIdfK,
     required this.itemOrder,
+    this.isPinned = false,
   });
 }
