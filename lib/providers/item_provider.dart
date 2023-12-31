@@ -184,6 +184,20 @@ class ItemNotifier extends StateNotifier<List<Item>> {
     state = state.where((item) => item.itemId != itemId).toList();
   }
 
+  //Function that is called when tapping the pinned icon for an Item
+  Future<void> updateIsPinnedForItem(int? itemId, bool isPinned) async {
+    DBHelper.updateWithId(
+      'item',
+      'ItemId = ?',
+      itemId,
+      {
+        'IsPinned': isPinned ? 1 : 0,
+      },
+    );
+
+    //Need to add the order change here - like how it works for is completed
+  }
+
   bool checkIfItemExists(String newItemName) {
     return state.any((item) => item.itemName == newItemName);
   }

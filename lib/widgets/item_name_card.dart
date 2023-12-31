@@ -6,6 +6,8 @@ import '../models/item.dart';
 
 import '../providers/item_provider.dart';
 
+import './pinned_icon_toggle.dart';
+
 class ItemNameCard extends ConsumerStatefulWidget {
   final Item item;
   final Function() notifiyParent;
@@ -96,7 +98,7 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-              widget.item.isPinned ? const Icon(Icons.push_pin) : const Icon(Icons.push_pin_outlined),
+              PinnedIconToggle(item: widget.item),
               Text(formatDate(widget.item.dateAdded)),
             ],
           ),
