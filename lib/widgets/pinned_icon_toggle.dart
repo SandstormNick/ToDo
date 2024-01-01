@@ -27,7 +27,6 @@ class _MyWidgetState extends ConsumerState<PinnedIconToggle> {
       onTap: _onIsPinnedTapped,
       child: Icon(
         widget.item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-        // Add any additional styling or properties as needed
       ),
     );
   }

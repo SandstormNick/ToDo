@@ -98,7 +98,7 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-              PinnedIconToggle(item: widget.item),
+              !widget.item.isCompleted ? PinnedIconToggle(item: widget.item) : const SizedBox(),
               Text(formatDate(widget.item.dateAdded)),
             ],
           ),
