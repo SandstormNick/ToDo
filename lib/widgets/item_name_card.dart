@@ -6,8 +6,6 @@ import '../models/item.dart';
 
 import '../providers/item_provider.dart';
 
-import './pinned_icon_toggle.dart';
-
 class ItemNameCard extends ConsumerStatefulWidget {
   final Item item;
   final Function() notifiyParent;
@@ -48,6 +46,14 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
           widget.notifiyParent();
         },
       );
+
+  void _onIsPinnedTapped() => setState(() {
+    widget.item.isPinned = !widget.item.isPinned;
+
+    ref.watch(itemProvider.notifier).updateIsPinnedForItem(widget.item.itemId, widget.item.isPinned);
+
+    widget.notifiyParent();
+  });
 
   String formatDate(DateTime dateTime) {
     var year = dateTime.year.toString();
@@ -98,7 +104,13 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-              !widget.item.isCompleted ? PinnedIconToggle(item: widget.item) : const SizedBox(),
+              !widget.item.isCompleted ?
+              GestureDetector(
+                onTap: _onIsPinnedTapped,
+                child: Icon(
+                  widget.item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+                ),
+              ) : const SizedBox(),
               Text(formatDate(widget.item.dateAdded)),
             ],
           ),

@@ -187,6 +187,8 @@ class ItemNotifier extends StateNotifier<List<Item>> {
   }
 
   //Function that is called when tapping the pinned icon for an Item
+  //It updates the isPinned property
+  //It updates the ItemOrder for the necessary items
   Future<void> updateIsPinnedForItem(int? itemId, bool isPinned) async {
     DBHelper.updateWithId(
       'item',
@@ -198,6 +200,23 @@ class ItemNotifier extends StateNotifier<List<Item>> {
     );
 
     //Need to add the order change here - like how it works for is completed
+
+    //First update the order of the unpinned items
+    List<Item> itemOrdersToUpdate = _getItemsToUpdateAfterPinning(itemId!);
+
+    for (var item in itemOrdersToUpdate) {
+      DBHelper.updateWithId(
+        'item',
+        'ItemId = ?',
+        item.itemId,
+        {
+          'ItemOrder': item.itemOrder + 1,
+        },
+      );
+    }
+    
+    //Update the ItemOrder of the Pinned Item
+    _updatePinnedItemOrder(itemId);
   }
 
   bool checkIfItemExists(String newItemName) {
@@ -242,6 +261,89 @@ class ItemNotifier extends StateNotifier<List<Item>> {
     return itemsItemOrderToUpdate;
   }
 
+  List<Item> _getItemsToUpdateAfterPinning(int itemId) {
+    Item pinnedItem = state.firstWhere((item) => item.itemId == itemId);
+
+    List<Item> itemsItemOrderToUpdate = state
+      .where((item) => 
+        !item.isCompleted && !item.isPinned && item.itemOrder < pinnedItem.itemOrder
+      ).toList();
+
+    return itemsItemOrderToUpdate;
+  }
+
+  void _updatePinnedItemOrder(int itemId) {
+    Item tappedItem = state.firstWhere((item) => item.itemId == itemId);
+
+    List<Item> pinnedItems = state
+      .where((item) =>
+          item.isPinned)
+      .toList();
+
+    if (tappedItem.isPinned) {
+      _updatePinnedItemOrderIfIsPinnedIsTrue(pinnedItems, tappedItem);
+    }
+    else {
+      __updatePinnedItemOrderIfIsPinnedIsFalse(pinnedItems, tappedItem);
+    }
+  }
+
+  //Function updates the ItemOrder when you set an Item isPinned to TRUE
+  void _updatePinnedItemOrderIfIsPinnedIsTrue(List<Item> pinnedItems, Item tappedItem) {
+    //isPinned is already set for this item so we check to see if there are at least 2 pinned items before going into the if block
+    if (pinnedItems.length > 1) {
+      tappedItem.itemOrder = pinnedItems.length;
+    }
+    else {
+      //there are no pinned items
+      tappedItem.itemOrder = 1;
+    }
+
+    DBHelper.updateWithId(
+      'item',
+      'ItemId = ?',
+      tappedItem.itemId,
+      {
+        'ItemOrder': tappedItem.itemOrder,
+      },
+    );
+  }
+
+  //Function updates the ItemOrder when you set an Item isPinned to FALSE
+  void __updatePinnedItemOrderIfIsPinnedIsFalse(List<Item> pinnedItems, Item tappedItem) {
+    List<Item> itemsItemOrderToUpdate = state
+        .where((item) => 
+          item.isPinned && item.itemOrder > tappedItem.itemOrder
+        ).toList();
+
+    if (pinnedItems.isNotEmpty){
+        for (var item in itemsItemOrderToUpdate) {
+          DBHelper.updateWithId(
+            'item',
+            'ItemId = ?',
+            item.itemId,
+            {
+              'ItemOrder': item.itemOrder - 1,
+            },
+          );
+        }
+
+        tappedItem.itemOrder = tappedItem.itemOrder + itemsItemOrderToUpdate.length;
+      }
+      else {
+        tappedItem.itemOrder = 1;
+      }
+
+      DBHelper.updateWithId(
+          'item',
+          'ItemId = ?',
+          tappedItem.itemId,
+          {
+            'ItemOrder': tappedItem.itemOrder,
+          },
+        );
+  }
+
   //Function to find the next available ItemOrder where isCompleted is true
   int _getNextAvailableCompletedItemOrder(int itemId) {
     List<int> itemOrders = state
@@ -263,7 +365,6 @@ class ItemNotifier extends StateNotifier<List<Item>> {
     //print _items -uncomment the print to utilize
     //print('Printing records from item Table');
     state.forEach((item) {
-      //print("itemId: " + item.itemId.toString());
       //print("itemId: " + item.itemId.toString());
       //print("itemName: " + item.itemName);
       //print("itemOrder: " + item.itemOrder.toString());
