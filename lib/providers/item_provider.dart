@@ -113,6 +113,7 @@ class ItemNotifier extends StateNotifier<List<Item>> {
 
   //Function that is called when updating an item as completed
   //The selected item is updated along with the itemOrder of any other pending items that precede this one
+  //Also set IsPinned to false
   Future<void> updateIsCompletedTrueForItem(int? itemId) async {
     DBHelper.updateWithId(
       'item',
@@ -120,6 +121,7 @@ class ItemNotifier extends StateNotifier<List<Item>> {
       itemId,
       {
         'IsCompleted': 1,
+        'IsPinned': 0,
         'ItemOrder': _getNextAvailableCompletedItemOrder(itemId!),
       },
     );
