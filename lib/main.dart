@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_list/screens/add_note_screen.dart';
 
 import 'screens/categories_screen.dart';
 import 'screens/add_category_screen.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
         CategoryScreen.routeName: (ctx) => const CategoryScreen(),
         AddItemScreen.routeName: (ctx) => const AddItemScreen(),
         NoteScreen.routeName: (ctx) => const NoteScreen(),
+        AddNoteScreen.routeName: (ctx) => const AddNoteScreen(),
       },
     );
   }
