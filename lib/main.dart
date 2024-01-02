@@ -5,6 +5,7 @@ import 'screens/categories_screen.dart';
 import 'screens/add_category_screen.dart';
 import 'screens/category_screen.dart';
 import 'screens/add_item_screen.dart';
+import 'screens/note_screen.dart';
 
 var kColorScheme = ColorScheme.fromSeed(seedColor: Colors.green);
 var kDarkColorScheme = ColorScheme.fromSeed(
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
         AddCategoryScreen.routeName: (ctx) => const AddCategoryScreen(),
         CategoryScreen.routeName: (ctx) => const CategoryScreen(),
         AddItemScreen.routeName: (ctx) => const AddItemScreen(),
+        NoteScreen.routeName: (ctx) => const NoteScreen(),
       },
     );
   }

@@ -6,6 +6,8 @@ import '../models/item.dart';
 
 import '../providers/item_provider.dart';
 
+import '../screens/note_screen.dart';
+
 class ItemNameCard extends ConsumerStatefulWidget {
   final Item item;
   final Function() notifiyParent;
@@ -87,32 +89,42 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
       child: SizedBox(
         height: 100,
         child: Card(
-          child: Row(
-            children: <Widget>[
-              Transform.scale(
-                //scale: 1.5,
-                scale: 1,
-                child: Checkbox(
-                  value: widget.item.isCompleted,
-                  activeColor: Colors.green,
-                  onChanged: _onIsCompletedChanged,
+          child: InkWell(
+            splashColor: Theme.of(context).splashColor,
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                NoteScreen.routeName,
+                arguments: widget.item,
+              );
+            },
+            child: Row(
+              children: <Widget>[
+                Transform.scale(
+                  //scale: 1.5,
+                  scale: 1,
+                  child: Checkbox(
+                    value: widget.item.isCompleted,
+                    activeColor: Colors.green,
+                    onChanged: _onIsCompletedChanged,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Text(
-                  widget.item.itemName,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-              !widget.item.isCompleted ?
-              GestureDetector(
-                onTap: _onIsPinnedTapped,
-                child: Icon(
-                  widget.item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-                ),
-              ) : const SizedBox(),
-              Text(formatDate(widget.item.dateAdded)),
-            ],
+                Expanded(
+                    child: Text(
+                      widget.item.itemName,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                !widget.item.isCompleted ?
+                GestureDetector(
+                  onTap: _onIsPinnedTapped,
+                  child: Icon(
+                    widget.item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+                  ),
+                ) : const SizedBox(),
+                Text(formatDate(widget.item.dateAdded)),
+              ],
+            ),
           ),
         ),
       ),
