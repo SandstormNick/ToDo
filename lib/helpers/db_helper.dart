@@ -14,6 +14,10 @@ class DBHelper {
         'CREATE TABLE category(CategoryId INTEGER PRIMARY KEY,CategoryName TEXT, IsDeleted INTEGER DEFAULT 0)');
     await db.execute(
         'CREATE TABLE item(ItemId INTEGER PRIMARY KEY, CategoryId_FK INTEGER, ItemName TEXT, IsCompleted INTEGER DEFAULT 0, IsDeleted INTEGER DEFAULT 0, DateAdded TEXT, ItemOrder INTEGER, IsPinned INTEGER DEFAULT 0, FOREIGN KEY (CategoryId_FK) REFERENCES category(CategoryId))');
+    await db.execute(
+        'CREATE TABLE category_note(CategoryNoteId INTEGER PRIMARY KEY, CategoryId_FK INTEGER, NoteText TEXT, DateAdded TEXT, IsDeleted INTEGER DEFAULT 0, FOREIGN KEY (CategoryId_FK) REFERENCES category(CategoryId))');
+    await db.execute(
+        'CREATE TABLE item_note(ItemNoteId INTEGER PRIMARY KEY, ItemId_FK INTEGER, NoteText TEXT, DateAdded TEXT, IsDeleted INTEGER DEFAULT 0, FOREIGN KEY (ItemId_FK) REFERENCES item(ItemId))');
   }
 
   static Future<void> updateWithId(
