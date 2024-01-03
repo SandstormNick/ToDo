@@ -52,6 +52,19 @@ class NoteProvider extends StateNotifier<List<Note>> {
     state.last.noteId = insertedId;
   }
 
+  Future<void> updateIsDeletedForNote(int? noteId) async {
+    DBHelper.updateWithId(
+      'item_note',
+      'ItemNoteId = ?',
+      noteId,
+      {
+        'IsDeleted': 1
+      },
+    );
+
+    state = state.where((note) => note.noteId != noteId).toList();
+  }
+
   //A method that can be used in debugging
   void printNotesDebugMethod() {
     //print _items -uncomment the print to utilize

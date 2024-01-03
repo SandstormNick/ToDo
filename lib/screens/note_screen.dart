@@ -3,25 +3,34 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/item.dart';
 
-import '../screens/add_note_screen.dart';
-
 import '../providers/note_provider.dart';
 
+import '../screens/add_note_screen.dart';
+import '../widgets/note_text_card.dart';
+
 //If need be you can change this to only accomodate Item notes and add a sperate screen for categories if you struggle with routing
-class NoteScreen extends ConsumerWidget {
+class NoteScreen extends ConsumerStatefulWidget {
   static const routeName = 'note';
 
   const NoteScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NoteScreen> createState() => _NoteScreenState();
+}
+
+class _NoteScreenState extends ConsumerState<NoteScreen> {
+  refresh() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Item;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           '${args.itemName} Notes',
-          key: key,
         ),
         actions: <Widget>[
           IconButton(
@@ -55,7 +64,7 @@ class NoteScreen extends ConsumerWidget {
                               for (var i = 0;
                                   i < ref.watch(noteProvider).length;
                                   i++)
-                                Text(ref.watch(noteProvider)[i].noteText),
+                                NoteTextCard(note: ref.watch(noteProvider)[i], notifiyParent: refresh),
                             ],
                           ),
                         ),
