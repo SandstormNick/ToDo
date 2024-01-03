@@ -27,13 +27,14 @@ class NoteScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(AddNoteScreen.routeName);
+              Navigator.of(context).pushNamed(AddNoteScreen.routeName,
+                  arguments: args);
             },
           )
         ],
       ),
       body: FutureBuilder(
-        future: ref.read(noteProvider.notifier).fetchAndSetNotes(),
+        future: ref.read(noteProvider.notifier).fetchAndSetNotes(args.itemId!),
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? const Center(

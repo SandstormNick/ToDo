@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/note_provider.dart';
+
+import '../models/item.dart';
+
 class AddNoteScreen extends ConsumerStatefulWidget {
   static const routeName = 'add-note';
 
@@ -11,20 +15,23 @@ class AddNoteScreen extends ConsumerStatefulWidget {
 }
 
 class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
-  final _formKey = GlobalKey<FormState>();
 
   final _noteTextController = TextEditingController();
 
-  Future<void> _saveItem() async {
-    
+  Future<void> _saveNote(int itemId) async {
+    ref.watch(noteProvider.notifier).addNote(
+            _noteTextController.text,
+            itemId,
+          );
+
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    //final args = ModalRoute.of(context)!.settings.arguments as Category;
+    final args = ModalRoute.of(context)!.settings.arguments as Item;
 
     return Form(
-      key: _formKey,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Add Note'),
@@ -51,7 +58,7 @@ class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
               ),
             ),
             ElevatedButton.icon(
-              onPressed: () => _saveItem(),
+              onPressed: () => _saveNote(args.itemId!),
               icon: const Icon(Icons.add),
               label: const Text('Add Note'),
             )
