@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/item.dart';
 
-import 'package:todo_list/screens/add_note_screen.dart';
+import '../screens/add_note_screen.dart';
+
+import '../providers/note_provider.dart';
 
 //If need be you can change this to only accomodate Item notes and add a sperate screen for categories if you struggle with routing
 class NoteScreen extends ConsumerWidget {
@@ -18,7 +20,7 @@ class NoteScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Notes',
+          '${args.itemName} Notes',
           key: key,
         ),
         actions: <Widget>[
@@ -30,7 +32,35 @@ class NoteScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: const Text('Add your first Note'),
+      body: FutureBuilder(
+        future: ref.read(noteProvider.notifier).fetchAndSetNotes(),
+        builder: (context, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer(
+                child: const Center(
+                  child: Text('Add your first Note'),
+                ),
+                builder: (context, ref, child) => ref
+                        .watch(noteProvider)
+                        .isEmpty
+                    ? child!
+                    : SingleChildScrollView(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              for (var i = 0;
+                                  i < ref.watch(noteProvider).length;
+                                  i++)
+                                Text(ref.watch(noteProvider)[i].noteText),
+                            ],
+                          ),
+                        ),
+                      ),
+              ),
+      ),
     );
   }
   
