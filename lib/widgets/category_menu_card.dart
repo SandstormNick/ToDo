@@ -7,6 +7,7 @@ import '../providers/category_provider.dart';
 import '../models/category.dart';
 
 import '../screens/category_screen.dart';
+import '../screens/note_category_screen.dart';
 
 class CategoryMenuCard extends ConsumerStatefulWidget {
   final Category category;
@@ -94,7 +95,17 @@ class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
                       widget.category.categoryName, 
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                  )
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context, 
+                        NoteCategoryScreen.routeName, 
+                        arguments: widget.category,
+                      );
+                    }, 
+                    icon: const Icon(Icons.notes),
+                  ),
                 ],
               ),
             ),

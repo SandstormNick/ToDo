@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/item.dart';
+import '../models/category.dart';
 
 import '../providers/note_provider.dart';
 
 import '../screens/add_note_screen.dart';
 import '../widgets/note_text_card.dart';
 
-class NoteItemScreen extends ConsumerStatefulWidget {
-  static const routeName = 'note-item';
+class NoteCategoryScreen extends ConsumerStatefulWidget {
+  static const routeName = 'note-category';
 
-  const NoteItemScreen({Key? key}) : super(key: key);
+  const NoteCategoryScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<NoteItemScreen> createState() => _NoteItemScreenState();
+  ConsumerState<NoteCategoryScreen> createState() => _NoteCategoryScreenState();
 }
 
-class _NoteItemScreenState extends ConsumerState<NoteItemScreen> {
+class _NoteCategoryScreenState extends ConsumerState<NoteCategoryScreen> {
   refresh() {
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Item;
+    final args = ModalRoute.of(context)!.settings.arguments as Category;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${args.itemName} Notes',
+          '${args.categoryName} Notes',
         ),
         actions: <Widget>[
           IconButton(
@@ -42,7 +42,7 @@ class _NoteItemScreenState extends ConsumerState<NoteItemScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: ref.read(noteProvider.notifier).fetchAndSetNotes(args.itemId!),
+        future: ref.read(noteProvider.notifier).fetchAndSetNotes(args.categoryId),
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? const Center(
