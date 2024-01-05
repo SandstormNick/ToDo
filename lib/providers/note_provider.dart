@@ -16,26 +16,16 @@ class NoteProvider extends StateNotifier<List<Note>> {
     }
   }
 
-  Future<void> addNote(String inputText, int itemId) async {
+  Future<void> addNote(String inputText, int id, bool isItem) async {
     DateTime date = DateTime.now();
     date = DateTime(date.year, date.month, date.day);
 
-    final newNote = Note(
-      noteText: inputText,
-      dateAdded: date,
-      itemIdFk: itemId,
-    );
-
-    state = [...state, newNote];
-
-    final int insertedId = await DBHelper.insertReturnId('item_note', {
-      'ItemId_FK': itemId,
-      'NoteText': newNote.noteText,
-      'DateAdded': newNote.dateAdded.toString(),
-      'IsDeleted': 0
-    });
-
-    state.last.noteId = insertedId;
+    if (isItem) {
+      _addItemNote(inputText, id, date);
+    }
+    else {
+      _addCategoryNote(inputText, id, date);
+    }
   }
 
   Future<void> updateIsDeletedForNote(int? noteId) async {
@@ -97,6 +87,44 @@ class NoteProvider extends StateNotifier<List<Note>> {
           ),
         )
         .toList();
+  }
+
+  Future<void> _addItemNote(String inputText, int id, DateTime date) async {
+    final newNote = Note(
+      noteText: inputText,
+      dateAdded: date,
+      itemIdFk: id,
+    );
+
+    state = [...state, newNote];
+
+    final int insertedId = await DBHelper.insertReturnId('item_note', {
+      'ItemId_FK': id,
+      'NoteText': newNote.noteText,
+      'DateAdded': newNote.dateAdded.toString(),
+      'IsDeleted': 0
+    });
+
+    state.last.noteId = insertedId;
+  }
+
+  Future<void> _addCategoryNote(String inputText, int id, DateTime date) async {
+    final newNote = Note(
+      noteText: inputText,
+      dateAdded: date,
+      categoryIdfK: id,
+    );
+
+    state = [...state, newNote];
+
+    final int insertedId = await DBHelper.insertReturnId('category_note', {
+      'CategoryId_FK': id,
+      'NoteText': newNote.noteText,
+      'DateAdded': newNote.dateAdded.toString(),
+      'IsDeleted': 0
+    });
+
+    state.last.noteId = insertedId;
   }
 
   //A method that can be used in debugging

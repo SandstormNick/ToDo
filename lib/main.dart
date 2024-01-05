@@ -68,7 +68,8 @@ class MyApp extends StatelessWidget {
         AddItemScreen.routeName: (ctx) => const AddItemScreen(),
         NoteItemScreen.routeName: (ctx) => const NoteItemScreen(),
         NoteCategoryScreen.routeName: (ctx) => const NoteCategoryScreen(),
-        AddNoteScreen.routeName: (ctx) => const AddNoteScreen(),
+        AddNoteScreen.routeAddItemNote: (ctx) => const AddNoteScreen(isItem: true,),
+        AddNoteScreen.routeAddCategoryNote: (ctx) => const AddNoteScreen(isItem: false,),
       },
     );
   }

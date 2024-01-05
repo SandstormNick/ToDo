@@ -35,8 +35,8 @@ class _NoteCategoryScreenState extends ConsumerState<NoteCategoryScreen> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(AddNoteScreen.routeName,
-                  arguments: args);
+              Navigator.of(context).pushNamed(AddNoteScreen.routeAddCategoryNote,
+                  arguments: args.categoryId);
             },
           )
         ],

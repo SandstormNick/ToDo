@@ -5,9 +5,12 @@ import '../providers/note_provider.dart';
 
 
 class AddNoteScreen extends ConsumerStatefulWidget {
-  static const routeName = 'add-note';
+  static const routeAddItemNote = 'add-item-note';
+  static const routeAddCategoryNote = 'add-category-note';
 
-  const AddNoteScreen({Key? key}) : super(key: key);
+  final bool isItem;
+
+  const AddNoteScreen({Key? key, required this.isItem}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AddNoteScreen();
@@ -17,10 +20,11 @@ class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
 
   final _noteTextController = TextEditingController();
 
-  Future<void> _saveNote(int itemId) async {
+  Future<void> _saveNote(int id) async {
     ref.watch(noteProvider.notifier).addNote(
             _noteTextController.text,
-            itemId,
+            id,
+            widget.isItem ? true : false
           );
 
     Navigator.of(context).pop();
