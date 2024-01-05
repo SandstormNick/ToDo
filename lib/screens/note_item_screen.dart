@@ -36,7 +36,7 @@ class _NoteItemScreenState extends ConsumerState<NoteItemScreen> {
             icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).pushNamed(AddNoteScreen.routeName,
-                  arguments: args);
+                  arguments: args.itemId);
             },
           )
         ],
