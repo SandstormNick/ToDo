@@ -9,10 +9,11 @@ import '../providers/note_provider.dart';
 class NoteTextCard extends ConsumerStatefulWidget {
   final Note note;
   final Function() notifiyParent;
+  final bool isItem;
 
   const NoteTextCard({
     Key? key,
-    required this.note, required this.notifiyParent
+    required this.note, required this.notifiyParent, required this.isItem,
   }) : super(key: key);
 
   @override
@@ -25,7 +26,10 @@ class _NoteTextCard extends ConsumerState<NoteTextCard> {
       //Should I be setting state still?
       ref
           .watch(noteProvider.notifier)
-          .updateIsDeletedForNote(widget.note.noteId);
+          .updateIsDeletedForNote(
+            widget.note.noteId,
+            widget.isItem ? true : false
+          );
 
       widget.notifiyParent();
     },

@@ -16,7 +16,7 @@ class NoteProvider extends StateNotifier<List<Note>> {
     }
   }
 
-  Future<void> addNote(String inputText, int id, bool isItem) async {
+  addNote(String inputText, int id, bool isItem) {
     DateTime date = DateTime.now();
     date = DateTime(date.year, date.month, date.day);
 
@@ -28,15 +28,13 @@ class NoteProvider extends StateNotifier<List<Note>> {
     }
   }
 
-  Future<void> updateIsDeletedForNote(int? noteId) async {
-    DBHelper.updateWithId(
-      'item_note',
-      'ItemNoteId = ?',
-      noteId,
-      {
-        'IsDeleted': 1
-      },
-    );
+  updateIsDeletedForNote(int? noteId, bool isItem) {
+    if (isItem){
+      _updateIsDeletedForItemNote(noteId!);
+    }
+    else {
+      _updateIsDeletedForCategoryNote(noteId!);
+    }
 
     state = state.where((note) => note.noteId != noteId).toList();
   }
@@ -77,7 +75,7 @@ class NoteProvider extends StateNotifier<List<Note>> {
     state = dataList
         .map(
           (mapNote) => Note(
-            noteId: mapNote['ItemNoteId'],
+            noteId: mapNote['CategoryNoteId'],
             noteText: mapNote['NoteText'],
             isDeleted: mapNote['IsDeleted'] == 0 ? false : true,
             isItemNote: false,
@@ -89,6 +87,7 @@ class NoteProvider extends StateNotifier<List<Note>> {
         .toList();
   }
 
+  //Function to add Note for Item
   Future<void> _addItemNote(String inputText, int id, DateTime date) async {
     final newNote = Note(
       noteText: inputText,
@@ -108,6 +107,7 @@ class NoteProvider extends StateNotifier<List<Note>> {
     state.last.noteId = insertedId;
   }
 
+  //Function to add Category for Item
   Future<void> _addCategoryNote(String inputText, int id, DateTime date) async {
     final newNote = Note(
       noteText: inputText,
@@ -125,6 +125,30 @@ class NoteProvider extends StateNotifier<List<Note>> {
     });
 
     state.last.noteId = insertedId;
+  }
+
+  //Function to soft delete note for Item
+  Future<void> _updateIsDeletedForItemNote(int noteId) async {
+    DBHelper.updateWithId(
+      'item_note',
+      'ItemNoteId = ?',
+      noteId,
+      {
+        'IsDeleted': 1
+      },
+    );
+  }
+
+  //Function to soft delete note for Category
+  Future<void> _updateIsDeletedForCategoryNote(int noteId) async {
+    DBHelper.updateWithId(
+      'category_note',
+      'CategoryNoteId = ?',
+      noteId,
+      {
+        'IsDeleted': 1
+      },
+    );
   }
 
   //A method that can be used in debugging

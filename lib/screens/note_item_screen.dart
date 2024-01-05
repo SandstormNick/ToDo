@@ -63,7 +63,11 @@ class _NoteItemScreenState extends ConsumerState<NoteItemScreen> {
                               for (var i = 0;
                                   i < ref.watch(noteProvider).length;
                                   i++)
-                                NoteTextCard(note: ref.watch(noteProvider)[i], notifiyParent: refresh),
+                                NoteTextCard(
+                                  note: ref.watch(noteProvider)[i], 
+                                  notifiyParent: refresh,
+                                  isItem: true,
+                                ),
                             ],
                           ),
                         ),
