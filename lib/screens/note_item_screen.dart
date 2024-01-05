@@ -42,7 +42,7 @@ class _NoteItemScreenState extends ConsumerState<NoteItemScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: ref.read(noteProvider.notifier).fetchAndSetNotes(args.itemId!),
+        future: ref.read(noteProvider.notifier).fetchAndSetNotes(args.itemId!, true),
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? const Center(

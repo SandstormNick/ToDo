@@ -7,27 +7,13 @@ import '../helpers/db_helper.dart';
 class NoteProvider extends StateNotifier<List<Note>> {
   NoteProvider() : super([]);
 
-  Future<void> fetchAndSetNotes(int itemId) async {
-    final dataList = await DBHelper.getDataWithId(
-      'item_note',
-      'ItemId_FK = ? AND IsDeleted = 0',
-      'DateAdded',
-      itemId
-      );
-
-    state = dataList
-        .map(
-          (mapNote) => Note(
-            noteId: mapNote['ItemNoteId'],
-            noteText: mapNote['NoteText'],
-            isDeleted: mapNote['IsDeleted'] == 0 ? false : true,
-            isItemNote: true,
-            isCategoryNote: false,
-            dateAdded: DateTime.parse(mapNote['DateAdded']),
-            itemIdFk: mapNote['ItemId_FK'],
-          ),
-        )
-        .toList();
+  fetchAndSetNotes(int id, bool isItem) {
+    if (isItem){
+      _fetchAndSetItemNotes(id);
+    }
+    else {
+      _fetchAndSetCategoryNotes(id);
+    }
   }
 
   Future<void> addNote(String inputText, int itemId) async {
@@ -63,6 +49,54 @@ class NoteProvider extends StateNotifier<List<Note>> {
     );
 
     state = state.where((note) => note.noteId != noteId).toList();
+  }
+
+  //Function fetches and sets notes for an Item
+  Future<void> _fetchAndSetItemNotes(int itemId) async {
+    final dataList = await DBHelper.getDataWithId(
+      'item_note',
+      'ItemId_FK = ? AND IsDeleted = 0',
+      'DateAdded',
+      itemId
+      );
+
+    state = dataList
+        .map(
+          (mapNote) => Note(
+            noteId: mapNote['ItemNoteId'],
+            noteText: mapNote['NoteText'],
+            isDeleted: mapNote['IsDeleted'] == 0 ? false : true,
+            isItemNote: true,
+            isCategoryNote: false,
+            dateAdded: DateTime.parse(mapNote['DateAdded']),
+            itemIdFk: mapNote['ItemId_FK'],
+          ),
+        )
+        .toList();
+  }
+
+  //Function fetches and sets notes for a Category
+  Future<void> _fetchAndSetCategoryNotes(int categoryId) async {
+    final dataList = await DBHelper.getDataWithId(
+      'category_note',
+      'CategoryId_FK = ? AND IsDeleted = 0',
+      'DateAdded',
+      categoryId
+      );
+
+    state = dataList
+        .map(
+          (mapNote) => Note(
+            noteId: mapNote['ItemNoteId'],
+            noteText: mapNote['NoteText'],
+            isDeleted: mapNote['IsDeleted'] == 0 ? false : true,
+            isItemNote: false,
+            isCategoryNote: true,
+            dateAdded: DateTime.parse(mapNote['DateAdded']),
+            categoryIdfK: mapNote['CategoryId_FK'],
+          ),
+        )
+        .toList();
   }
 
   //A method that can be used in debugging

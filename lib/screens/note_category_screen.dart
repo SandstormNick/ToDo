@@ -42,7 +42,7 @@ class _NoteCategoryScreenState extends ConsumerState<NoteCategoryScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: ref.read(noteProvider.notifier).fetchAndSetNotes(args.categoryId),
+        future: ref.read(noteProvider.notifier).fetchAndSetNotes(args.categoryId, false),
         builder: (context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
             ? const Center(
