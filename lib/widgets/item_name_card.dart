@@ -6,7 +6,7 @@ import '../models/item.dart';
 
 import '../providers/item_provider.dart';
 
-import '../screens/note_screen.dart';
+import '../screens/note_item_screen.dart';
 
 class ItemNameCard extends ConsumerStatefulWidget {
   final Item item;
@@ -94,7 +94,7 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
             onTap: () {
               Navigator.pushNamed(
                 context,
-                NoteScreen.routeName,
+                NoteItemScreen.routeName,
                 arguments: widget.item,
               );
             },

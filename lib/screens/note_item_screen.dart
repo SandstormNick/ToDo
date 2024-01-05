@@ -8,17 +8,17 @@ import '../providers/note_provider.dart';
 import '../screens/add_note_screen.dart';
 import '../widgets/note_text_card.dart';
 
-//If need be you can change this to only accomodate Item notes and add a sperate screen for categories if you struggle with routing
-class NoteScreen extends ConsumerStatefulWidget {
+//Make category notes screen seperate
+class NoteItemScreen extends ConsumerStatefulWidget {
   static const routeName = 'note';
 
-  const NoteScreen({Key? key}) : super(key: key);
+  const NoteItemScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<NoteScreen> createState() => _NoteScreenState();
+  ConsumerState<NoteItemScreen> createState() => _NoteItemScreenState();
 }
 
-class _NoteScreenState extends ConsumerState<NoteScreen> {
+class _NoteItemScreenState extends ConsumerState<NoteItemScreen> {
   refresh() {
     setState(() {});
   }
