@@ -364,14 +364,26 @@ class ItemNotifier extends StateNotifier<List<Item>> {
   void printItemsDebugMethod() {
     //print _items -uncomment the print to utilize
     //print('Printing records from item Table');
-    state.forEach((item) {
+    for (var item in state) {
+      item.itemId = 1; //comment out
       //print("itemId: " + item.itemId.toString());
       //print("itemName: " + item.itemName);
       //print("itemOrder: " + item.itemOrder.toString());
       //print(item.dateAdded);
-    });
+    }
   }
 }
+
+//Insert this code into the widget to make use of the printItemsDebugMethod:
+
+// TextButton(
+//   onPressed: () {
+//     ref
+//         .watch(itemProvider.notifier)
+//         .printItemsDebugMethod();
+//   },
+//   child: const Text('Print Items'),
+//   ),
 
 final itemProvider = StateNotifierProvider<ItemNotifier, List<Item>>((ref) {
   return ItemNotifier();

@@ -155,9 +155,10 @@ class NoteProvider extends StateNotifier<List<Note>> {
   void printNotesDebugMethod() {
     //print _items -uncomment the print to utilize
     //print('Printing records from item Table');
-    state.forEach((note) {
-      print("noteText: " + note.noteText);
-    });
+    for (var note in state) {
+      note.noteId = 1; //comment out
+      //print("noteText: " + note.noteText);
+    }
   }
 }
 
