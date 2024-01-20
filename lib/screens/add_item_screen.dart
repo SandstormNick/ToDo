@@ -29,11 +29,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   }
 
   Future<bool> _showAlertDialog() async {
-    return await showDialog (
+    return await showDialog(
       context: context,
-      builder: (context) => const CustomAlertDialog(
-        alertType: 'Item'
-        ),
+      builder: (context) => const CustomAlertDialog(alertType: 'Item'),
     );
   }
 
@@ -46,18 +44,17 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
         if (addAnyway) {
           ref.watch(itemProvider.notifier).addItem(
-            _itemNameController.text,
-            categoryId,
-          );
+                _itemNameController.text,
+                categoryId,
+              );
 
           Navigator.of(context).pop();
         }
-      }
-      else {
+      } else {
         ref.watch(itemProvider.notifier).addItem(
-          _itemNameController.text,
-          categoryId,
-        );
+              _itemNameController.text,
+              categoryId,
+            );
 
         Navigator.of(context).pop();
       }
@@ -86,6 +83,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                       TextFormField(
                         controller: _itemNameController,
                         autofocus: true,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: const InputDecoration(
                           labelText: 'Item name',
                         ),

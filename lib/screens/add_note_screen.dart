@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/note_provider.dart';
 
-
 class AddNoteScreen extends ConsumerStatefulWidget {
   static const routeAddItemNote = 'add-item-note';
   static const routeAddCategoryNote = 'add-category-note';
@@ -17,15 +16,12 @@ class AddNoteScreen extends ConsumerStatefulWidget {
 }
 
 class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
-
   final _noteTextController = TextEditingController();
 
   Future<void> _saveNote(int id) async {
-    ref.watch(noteProvider.notifier).addNote(
-            _noteTextController.text,
-            id,
-            widget.isItem ? true : false
-          );
+    ref
+        .watch(noteProvider.notifier)
+        .addNote(_noteTextController.text, id, widget.isItem ? true : false);
 
     Navigator.of(context).pop();
   }
@@ -51,6 +47,7 @@ class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
                       TextFormField(
                         controller: _noteTextController,
                         autofocus: true,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: const InputDecoration(
                           labelText: 'Enter note',
                         ),
@@ -70,5 +67,4 @@ class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
       ),
     );
   }
-
 }

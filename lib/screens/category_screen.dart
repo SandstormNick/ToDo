@@ -54,7 +54,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                   )
                 : Consumer(
                     child: const Center(
-                      child: Text('Add an item'),
+                      child: Text('Add an Item'),
                     ),
                     builder: (context, ref, child) =>
                         ref.watch(itemProvider).isEmpty

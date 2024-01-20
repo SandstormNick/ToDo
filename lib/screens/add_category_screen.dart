@@ -27,33 +27,27 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
   }
 
   Future<bool> _showAlertDialog() async {
-    return await showDialog (
+    return await showDialog(
       context: context,
-      builder: (context) => const CustomAlertDialog(
-        alertType: 'Category'
-        ),
+      builder: (context) => const CustomAlertDialog(alertType: 'Category'),
     );
   }
 
   Future<void> _saveCategory() async {
-
     if (_formKey.currentState!.validate()) {
       var newCategoryName = _categoryNameController.text;
 
-      if (ref.watch(categoryProvider.notifier).checkIfCategoryExists(newCategoryName)) {
+      if (ref
+          .watch(categoryProvider.notifier)
+          .checkIfCategoryExists(newCategoryName)) {
         bool addAnyway = await _showAlertDialog();
-        if (addAnyway){
-          ref
-            .watch(categoryProvider.notifier)
-            .addCategory(newCategoryName);
+        if (addAnyway) {
+          ref.watch(categoryProvider.notifier).addCategory(newCategoryName);
 
           Navigator.of(context).pop();
         }
-      }
-      else {
-        ref
-          .watch(categoryProvider.notifier)
-          .addCategory(newCategoryName);
+      } else {
+        ref.watch(categoryProvider.notifier).addCategory(newCategoryName);
 
         Navigator.of(context).pop();
       }
@@ -80,6 +74,7 @@ class _AddCategoryScreenState extends ConsumerState<AddCategoryScreen> {
                       TextFormField(
                         controller: _categoryNameController,
                         autofocus: true,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: const InputDecoration(
                           labelText: 'Category name',
                         ),

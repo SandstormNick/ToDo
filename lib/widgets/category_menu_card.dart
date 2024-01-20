@@ -75,7 +75,7 @@ class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
         ],
       ),
       child: SizedBox(
-        height: 100,
+        height: 75,
         child: Card(
           child: InkWell(
             splashColor: Theme.of(context).splashColor,
@@ -92,18 +92,18 @@ class _CategoryMenuCardState extends ConsumerState<CategoryMenuCard> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      widget.category.categoryName, 
+                      widget.category.categoryName,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                   IconButton(
                     onPressed: () {
                       Navigator.pushNamed(
-                        context, 
-                        NoteCategoryScreen.routeName, 
+                        context,
+                        NoteCategoryScreen.routeName,
                         arguments: widget.category,
                       );
-                    }, 
+                    },
                     icon: const Icon(Icons.notes),
                   ),
                 ],

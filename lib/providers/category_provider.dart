@@ -51,7 +51,8 @@ class CategoryNotifier extends StateNotifier<List<Category>> {
   }
 
   bool checkIfCategoryExists(String newCategoryName) {
-    return state.any((category) => category.categoryName == newCategoryName);
+    return state.any((category) =>
+        category.categoryName.toUpperCase() == newCategoryName.toUpperCase());
   }
 }
 

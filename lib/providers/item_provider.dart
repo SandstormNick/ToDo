@@ -214,13 +214,14 @@ class ItemNotifier extends StateNotifier<List<Item>> {
         },
       );
     }
-    
+
     //Update the ItemOrder of the Pinned Item
     _updatePinnedItemOrder(itemId);
   }
 
   bool checkIfItemExists(String newItemName) {
-    return state.any((item) => item.itemName == newItemName);
+    return state.any(
+        (item) => item.itemName.toUpperCase() == newItemName.toUpperCase());
   }
 
   //Function to find the next available ItemOrder where isCompleted is false
@@ -265,9 +266,11 @@ class ItemNotifier extends StateNotifier<List<Item>> {
     Item pinnedItem = state.firstWhere((item) => item.itemId == itemId);
 
     List<Item> itemsItemOrderToUpdate = state
-      .where((item) => 
-        !item.isCompleted && !item.isPinned && item.itemOrder < pinnedItem.itemOrder
-      ).toList();
+        .where((item) =>
+            !item.isCompleted &&
+            !item.isPinned &&
+            item.itemOrder < pinnedItem.itemOrder)
+        .toList();
 
     return itemsItemOrderToUpdate;
   }
@@ -275,26 +278,22 @@ class ItemNotifier extends StateNotifier<List<Item>> {
   void _updatePinnedItemOrder(int itemId) {
     Item tappedItem = state.firstWhere((item) => item.itemId == itemId);
 
-    List<Item> pinnedItems = state
-      .where((item) =>
-          item.isPinned)
-      .toList();
+    List<Item> pinnedItems = state.where((item) => item.isPinned).toList();
 
     if (tappedItem.isPinned) {
       _updatePinnedItemOrderIfIsPinnedIsTrue(pinnedItems, tappedItem);
-    }
-    else {
+    } else {
       __updatePinnedItemOrderIfIsPinnedIsFalse(pinnedItems, tappedItem);
     }
   }
 
   //Function updates the ItemOrder when you set an Item isPinned to TRUE
-  void _updatePinnedItemOrderIfIsPinnedIsTrue(List<Item> pinnedItems, Item tappedItem) {
+  void _updatePinnedItemOrderIfIsPinnedIsTrue(
+      List<Item> pinnedItems, Item tappedItem) {
     //isPinned is already set for this item so we check to see if there are at least 2 pinned items before going into the if block
     if (pinnedItems.length > 1) {
       tappedItem.itemOrder = pinnedItems.length;
-    }
-    else {
+    } else {
       //there are no pinned items
       tappedItem.itemOrder = 1;
     }
@@ -310,38 +309,38 @@ class ItemNotifier extends StateNotifier<List<Item>> {
   }
 
   //Function updates the ItemOrder when you set an Item isPinned to FALSE
-  void __updatePinnedItemOrderIfIsPinnedIsFalse(List<Item> pinnedItems, Item tappedItem) {
+  void __updatePinnedItemOrderIfIsPinnedIsFalse(
+      List<Item> pinnedItems, Item tappedItem) {
     List<Item> itemsItemOrderToUpdate = state
-        .where((item) => 
-          item.isPinned && item.itemOrder > tappedItem.itemOrder
-        ).toList();
+        .where((item) => item.isPinned && item.itemOrder > tappedItem.itemOrder)
+        .toList();
 
-    if (pinnedItems.isNotEmpty){
-        for (var item in itemsItemOrderToUpdate) {
-          DBHelper.updateWithId(
-            'item',
-            'ItemId = ?',
-            item.itemId,
-            {
-              'ItemOrder': item.itemOrder - 1,
-            },
-          );
-        }
-
-        tappedItem.itemOrder = tappedItem.itemOrder + itemsItemOrderToUpdate.length;
-      }
-      else {
-        tappedItem.itemOrder = 1;
-      }
-
-      DBHelper.updateWithId(
+    if (pinnedItems.isNotEmpty) {
+      for (var item in itemsItemOrderToUpdate) {
+        DBHelper.updateWithId(
           'item',
           'ItemId = ?',
-          tappedItem.itemId,
+          item.itemId,
           {
-            'ItemOrder': tappedItem.itemOrder,
+            'ItemOrder': item.itemOrder - 1,
           },
         );
+      }
+
+      tappedItem.itemOrder =
+          tappedItem.itemOrder + itemsItemOrderToUpdate.length;
+    } else {
+      tappedItem.itemOrder = 1;
+    }
+
+    DBHelper.updateWithId(
+      'item',
+      'ItemId = ?',
+      tappedItem.itemId,
+      {
+        'ItemOrder': tappedItem.itemOrder,
+      },
+    );
   }
 
   //Function to find the next available ItemOrder where isCompleted is true

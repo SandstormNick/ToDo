@@ -50,12 +50,14 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
       );
 
   void _onIsPinnedTapped() => setState(() {
-    widget.item.isPinned = !widget.item.isPinned;
+        widget.item.isPinned = !widget.item.isPinned;
 
-    ref.watch(itemProvider.notifier).updateIsPinnedForItem(widget.item.itemId, widget.item.isPinned);
+        ref
+            .watch(itemProvider.notifier)
+            .updateIsPinnedForItem(widget.item.itemId, widget.item.isPinned);
 
-    widget.notifiyParent();
-  });
+        widget.notifiyParent();
+      });
 
   String formatDate(DateTime dateTime) {
     var year = dateTime.year.toString();
@@ -87,7 +89,7 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
         ],
       ),
       child: SizedBox(
-        height: 100,
+        height: 75,
         child: Card(
           child: InkWell(
             splashColor: Theme.of(context).splashColor,
@@ -110,18 +112,21 @@ class _ItemNameCardState extends ConsumerState<ItemNameCard> {
                   ),
                 ),
                 Expanded(
-                    child: Text(
-                      widget.item.itemName,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                  child: Text(
+                    widget.item.itemName,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                !widget.item.isCompleted ?
-                GestureDetector(
-                  onTap: _onIsPinnedTapped,
-                  child: Icon(
-                    widget.item.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-                  ),
-                ) : const SizedBox(),
+                ),
+                !widget.item.isCompleted
+                    ? GestureDetector(
+                        onTap: _onIsPinnedTapped,
+                        child: Icon(
+                          widget.item.isPinned
+                              ? Icons.push_pin
+                              : Icons.push_pin_outlined,
+                        ),
+                      )
+                    : const SizedBox(),
                 Text(formatDate(widget.item.dateAdded)),
               ],
             ),
