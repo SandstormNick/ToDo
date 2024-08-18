@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
         colorScheme: kColorScheme,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: const ButtonStyle().copyWith(
-            backgroundColor: MaterialStatePropertyAll(kDarkColorScheme.primaryContainer),
-            foregroundColor: MaterialStatePropertyAll(kDarkColorScheme.onPrimaryContainer),
+            backgroundColor: WidgetStatePropertyAll(kDarkColorScheme.primaryContainer),
+            foregroundColor: WidgetStatePropertyAll(kDarkColorScheme.onPrimaryContainer),
           ),
         ),
       ),
@@ -54,8 +54,8 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: const ButtonStyle().copyWith(
-            backgroundColor: MaterialStatePropertyAll(kDarkColorScheme.primaryContainer),
-            foregroundColor: MaterialStatePropertyAll(kDarkColorScheme.onPrimaryContainer),
+            backgroundColor: WidgetStatePropertyAll(kDarkColorScheme.primaryContainer),
+            foregroundColor: WidgetStatePropertyAll(kDarkColorScheme.onPrimaryContainer),
           ),
         ),
       ),
